@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 // Load environment variables
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Connect to MongoDB
 mongoose
@@ -22,6 +24,7 @@ mongoose
 // Routes
 app.use("/api/properties", require("./routes/properties"));
 app.use("/api/appointments", require("./routes/appointments"));
+app.use("/api/uploads", require("./routes/uploads"));
 
 
 // Error handling middleware
