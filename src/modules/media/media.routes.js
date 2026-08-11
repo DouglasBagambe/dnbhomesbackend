@@ -1,0 +1,6 @@
+const router = require("express").Router(); const multer = require("multer"); const asyncHandler = require("../../utils/async-handler"); const service = require("./media.service"); const { AppError } = require("../../utils/errors");
+const allowed = new Set(["image/jpeg", "image/png", "image/webp", "image/avif", "video/mp4", "video/webm"]);
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024, files: 10 }, fileFilter: (req, file, cb) => allowed.has(file.mimetype) ? cb(null, true) : cb(new AppError(400, "INVALID_MEDIA_TYPE", "Unsupported media type")) });
+router.post("/", upload.array("files", 10), asyncHandler(async (req, res) => { if (!req.files?.length) throw new AppError(400, "FILE_REQUIRED", "At least one file is required"); for (const file of req.files) if (file.mimetype.startsWith("image/") && file.size > 10 * 1024 * 1024) throw new AppError(400, "IMAGE_TOO_LARGE", "Images must not exceed 10 MB"); const data = await Promise.all(req.files.map((file) => service.upload(file, req.admin.id))); res.status(201).json({ data }); }));
+router.delete("/:id", asyncHandler(async (req, res) => { await service.remove(req.params.id); res.status(204).end(); }));
+module.exports = router;
