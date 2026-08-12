@@ -5,7 +5,7 @@ dotenv.config({ path: process.env.ENV_FILE || path.resolve(process.cwd(), ".env"
 
 const environment = process.env.NODE_ENV || "development";
 const required = ["MONGO_URI", "JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET"];
-if (environment !== "test") {
+if (environment === "production") {
   for (const key of required) {
     if (!process.env[key]) throw new Error(`Missing required environment variable: ${key}`);
   }
@@ -22,10 +22,10 @@ module.exports = {
   env: environment,
   isProduction: environment === "production",
   port: Number(process.env.PORT || 3000),
-  mongoUri: process.env.MONGO_URI,
+  mongoUri: process.env.MONGO_URI || "mongodb://127.0.0.1:27017/homes_development",
   corsOrigins: split(process.env.CORS_ORIGINS),
-  accessSecret: process.env.JWT_ACCESS_SECRET || "test-access-secret-that-is-at-least-32-chars",
-  refreshSecret: process.env.JWT_REFRESH_SECRET || "test-refresh-secret-that-is-at-least-32-chars",
+  accessSecret: process.env.JWT_ACCESS_SECRET || "development-access-secret-change-before-production",
+  refreshSecret: process.env.JWT_REFRESH_SECRET || "development-refresh-secret-change-before-production",
   accessTtl: process.env.ACCESS_TOKEN_TTL || "15m",
   refreshDays: Number(process.env.REFRESH_TOKEN_DAYS || 30),
   logLevel: process.env.LOG_LEVEL || "info",

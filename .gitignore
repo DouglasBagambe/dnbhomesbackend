@@ -1,3 +1,5 @@
 .env
 node_modules
-uploads
+uploads/*
+!uploads/demo/
+!uploads/demo/*.jpg

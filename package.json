@@ -11,6 +11,7 @@
     "test": "MONGOMS_DISTRO=ubuntu-22.04 node --test --test-concurrency=1 test",
     "seed:admin": "node scripts/seed-admin.js",
     "seed:demo": "node scripts/seed-demo-properties.js",
+    "seed:demo:remove": "node scripts/remove-demo-properties.js",
     "migrate:v1": "node scripts/migrate-v1.js"
   },
   "engines": { "node": ">=20" },

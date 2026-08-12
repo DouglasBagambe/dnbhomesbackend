@@ -4,5 +4,6 @@ const schema = new mongoose.Schema({
   logo: String, phone: String, email: { type: String, lowercase: true, trim: true }, website: String, description: String,
   verificationStatus: { type: String, enum: ["unverified", "pending", "verified", "rejected"], default: "unverified", index: true },
   status: { type: String, enum: ["active", "inactive"], default: "active", index: true },
+  tags: [{ type: String, index: true }],
 }, { timestamps: true });
 module.exports = mongoose.model("Agency", schema);
