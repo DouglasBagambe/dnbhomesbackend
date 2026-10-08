@@ -12,4 +12,6 @@ const adminSchema = new mongoose.Schema({
   passwordResetExpiresAt: { type: Date, select: false },
 }, { timestamps: true });
 
+adminSchema.set("toJSON", { transform(doc, result) { for (const key of ["passwordHash", "tokenVersion", "passwordResetHash", "passwordResetExpiresAt"]) delete result[key]; return result; } });
+
 module.exports = mongoose.model("Admin", adminSchema);

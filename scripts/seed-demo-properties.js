@@ -1,3 +1,4 @@
+const { requireDemoDatabase } = require("../src/config/validate-env");
 const { connectDatabase, disconnectDatabase } = require("../src/config/database");
 const Property = require("../src/modules/properties/property.model");
 const Agent = require("../src/modules/agents/agent.model");
@@ -74,7 +75,7 @@ function buildProperty(index, representatives) {
 }
 
 async function main() {
-  if (process.env.NODE_ENV === "production") throw new Error("Demo seeding is disabled in production");
+  requireDemoDatabase(process.env);
   await connectDatabase();
   const agency = await Agency.findOneAndUpdate(
     { slug: "homes-demo-realty" },

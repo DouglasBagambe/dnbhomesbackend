@@ -29,3 +29,34 @@ test("editors cannot publish, feature or verify properties during creation", asy
   assert.equal(updated.body.data.verificationStatus, "unverified");
   assert.equal((await request(app).post(`/api/v1/admin/properties/${created.body.data._id}/publish`).set("Authorization", `Bearer ${editorToken}`)).status, 403);
 });
+
+test("refresh tokens rotate atomically and cannot be reused", async () => {
+  const login = await request(app).post("/api/v1/auth/admin/login").send({ email: "admin@example.com", password: "correct-horse-battery" });
+  const responses = await Promise.all(Array.from({ length: 2 }, () => request(app).post("/api/v1/auth/admin/refresh").send({ refreshToken: login.body.data.refreshToken })));
+  assert.deepEqual(responses.map((response) => response.status).sort(), [200, 401]);
+});
+test("editors cannot read booking or inquiry PII", async () => {
+  const login = await request(app).post("/api/v1/auth/admin/login").send({ email: "editor@example.com", password: "correct-horse-battery" });
+  for (const path of ["bookings", "inquiries"]) assert.equal((await request(app).get(`/api/v1/admin/${path}`).set("Authorization", `Bearer ${login.body.data.accessToken}`)).status, 403);
+});
+
+test("admin password resets revoke access/refresh sessions and never expose hashes", async () => {
+  const created = await request(app).post("/api/v1/admin/admins").set("Authorization", `Bearer ${token}`).send({ name: "Reset User", email: "reset@example.com", password: "correct-horse-battery", role: "editor" });
+  assert.equal(created.status, 201);
+  assert.equal(created.body.data.passwordHash, undefined);
+  const login = await request(app).post("/api/v1/auth/admin/login").send({ email: "reset@example.com", password: "correct-horse-battery" });
+  const reset = await request(app).patch(`/api/v1/admin/admins/${created.body.data._id}`).set("Authorization", `Bearer ${token}`).send({ password: "new-password-for-reset" });
+  assert.equal(reset.status, 200);
+  assert.equal(reset.body.data.passwordHash, undefined);
+  assert.equal(reset.body.data.tokenVersion, undefined);
+  assert.equal((await request(app).get("/api/v1/auth/admin/me").set("Authorization", `Bearer ${login.body.data.accessToken}`)).status, 401);
+  assert.equal((await request(app).post("/api/v1/auth/admin/refresh").send({ refreshToken: login.body.data.refreshToken })).status, 401);
+});
+
+test("failed sign-ins are rate limited with the API JSON contract", async () => {
+  let response;
+  for (let attempt = 0; attempt < 11; attempt++) response = await request(app).post("/api/v1/auth/admin/login").send({ email: "missing@example.com", password: "invalid-password" });
+  assert.equal(response.status, 429);
+  assert.equal(response.body.error.code, "RATE_LIMITED");
+  assert.ok(response.headers["retry-after"]);
+});

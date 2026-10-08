@@ -6,7 +6,7 @@ function notFoundHandler(req, res) {
 }
 
 function errorHandler(error, req, res, next) { // eslint-disable-line no-unused-vars
-  req.log?.error({ err: error }, "request failed");
+  req.log?.error(env.isProduction ? { errorType: error.name, status: error.status || 500 } : { err: error }, "request failed");
   let status = error.status || 500;
   let code = error.code || "INTERNAL_ERROR";
   let message = error.message || "An unexpected error occurred";
@@ -19,7 +19,7 @@ function errorHandler(error, req, res, next) { // eslint-disable-line no-unused-
   } else if (error.code === 11000) {
     status = 409; code = "CONFLICT"; message = "A record with these details already exists"; details = undefined;
   }
-  if (status >= 500 && env.isProduction) message = "An unexpected error occurred";
+  if (status >= 500 && env.isProduction) { message = "An unexpected error occurred"; code = "INTERNAL_ERROR"; details = undefined; }
   res.status(status).json({ error: { code, message, ...(details ? { details } : {}) } });
 }
 

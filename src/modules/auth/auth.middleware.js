@@ -8,8 +8,8 @@ async function authenticateAdmin(req, res, next) {
     const [scheme, token] = (req.headers.authorization || "").split(" ");
     if (scheme !== "Bearer" || !token) throw new AppError(401, "AUTH_REQUIRED", "Authentication required");
     const payload = jwt.verify(token, env.accessSecret, { issuer: "homes-api", audience: "homes-admin" });
-    const admin = await Admin.findById(payload.sub);
-    if (!admin || admin.status !== "active") throw new AppError(401, "AUTH_REQUIRED", "Authentication required");
+    const admin = await Admin.findById(payload.sub).select("+tokenVersion");
+    if (!admin || admin.status !== "active" || (payload.tokenVersion || 0) !== admin.tokenVersion) throw new AppError(401, "AUTH_REQUIRED", "Authentication required");
     req.admin = admin;
     next();
   } catch (error) {

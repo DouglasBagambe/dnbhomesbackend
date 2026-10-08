@@ -1,3 +1,4 @@
+const { requireDemoDatabase } = require("../src/config/validate-env");
 const { connectDatabase, disconnectDatabase } = require("../src/config/database");
 const Property = require("../src/modules/properties/property.model");
 const Agent = require("../src/modules/agents/agent.model");
@@ -7,7 +8,7 @@ const Booking = require("../src/modules/bookings/booking.model");
 const SEED_TAG = "demo:homes-v1";
 
 async function main() {
-  if (process.env.NODE_ENV === "production") throw new Error("Demo cleanup is disabled in production");
+  requireDemoDatabase(process.env);
   await connectDatabase();
   const propertyIds = await Property.distinct("_id", { tags: SEED_TAG });
   const [bookings, properties, agents, agencies] = await Promise.all([
