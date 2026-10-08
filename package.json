@@ -8,7 +8,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "check": "node --check src/server.js && node --check src/app.js",
-    "test": "MONGOMS_DISTRO=ubuntu-22.04 node --test --test-concurrency=1 test",
+    "test": "MONGOMS_DISTRO=ubuntu-22.04 node --test --test-concurrency=1 test/*.test.js",
     "seed:admin": "node scripts/seed-admin.js",
     "seed:demo": "node scripts/seed-demo-properties.js",
     "seed:demo:remove": "node scripts/remove-demo-properties.js",
