@@ -60,21 +60,27 @@ to a fictional property. The existing API schema is preserved: full credits are
 also visible in each description. Display renditions retain the source licence.
 Videos are omitted because no matching reusable footage was established.
 
-The reviewed 17 images were uploaded through the existing authenticated preview
-media endpoint after checking its connected database was `homes_preview`.
-Commons hotlinks intermittently returned HTTP 429; the display URLs therefore
-use the preview's existing media service. Original source URLs, authors and
-licences remain in the manifest and visible listing credits. Seed media trust
-accepts only exact Commons image paths or this preview's `/media/images/` JPG
-paths, never arbitrary remote hosts.
+## Durable fixed-showcase delivery
 
-**Current preview storage limitation:** the Render service uses local ephemeral
-media storage. These uploads are available now but are not durable across service
-replacement/redeployment or idle spin-down. Configure durable S3-compatible storage before launch
-and refresh the preview manifest after reuploading. Do not weaken the existing
-production media guards to accommodate local disk. The reviewed source files
-and upload checkpoints are retained locally under
-`artifacts/showcase-real-logo/` outside the product repositories.
+The 17 reviewed optimized files are copied byte-for-byte to the website's
+`public/images/uganda/showcase/` directory. Stable URLs use only
+`https://dnbhomeswebsite-psi.vercel.app/images/uganda/showcase/optimized-<id>.jpg`.
+All sourceUrl/originalUrl/author/licence/licenceUrl/reviewedAt/usage metadata and
+visible credits remain unchanged. The guard accepts only the reviewed original
+Commons URLs or these exact 17 stable website paths, never Render media, arbitrary
+hosts, another directory, unreviewed filenames, query strings or fragments.
+
+This fixed snapshot is durable website static hosting, not an upload storage
+replacement. Keep its filenames and bytes in future website deployments. Real
+property uploads still need durable object storage; existing production media
+and database guards are unchanged. The first showcase pass used authenticated
+Render uploads after Commons hotlinks intermittently returned HTTP 429; those
+local URLs are now retired from the seed because Render Free disk is ephemeral.
+
+Deploy the website media branch to its stable production alias and verify all
+17 URLs return HTTP 200 with matching source hashes **before** re-seeding the
+confirmed homes_preview database. Backend main must remain unmerged until G's
+review; no Render deployment is necessary for this data migration.
 
 ## Hosted execution record
 
@@ -98,5 +104,24 @@ remain unchanged. Only this seed's own 50 records were updated with the smaller
 preview media URLs; IDs and the exact total remained unchanged.
 
 The optimized reusable source copies are committed in `scripts/data/media/`
-for repeatable preview recovery or migration to durable media storage. Do not
-reuse temporary upload URLs after Render has discarded its local files.
+and identical website static copies provide repeatable fixed-showcase delivery.
+Do not reintroduce temporary Render upload URLs or the original 51 MB files.
+
+## Durable delivery migration — 9 October 2026
+
+Website commit `e000a1b6e500608ab2a46d847a337614d58e8cd3` passed validation
+(including browser and visual tests), was fast-forwarded onto website main, and
+reached Vercel production `READY` on the stable alias. All 17 showcase asset
+URLs returned HTTP 200 and matched the original optimized JPEG SHA-256 hashes
+before the guarded preview seed ran; their combined size remains 2,922,043 bytes.
+
+The staging-only `homes_preview` seed with `--confirm-preview` returned:
+0 created, 50 updated, 0 removed, 50 total. A guarded before/after database check
+confirmed all listing IDs, inventory fields, attribution and disclosure were
+preserved; only media delivery URLs and update timestamps changed. View counts
+were excluded from comparison because public detail reads increment them.
+There were no unrelated properties before or after migration. Covers and media
+now use the stable website showcase host, with no Render media URLs remaining.
+
+Backend main remains unmerged pending G's review. No Render deploy, restart or
+configuration change was performed for this migration.

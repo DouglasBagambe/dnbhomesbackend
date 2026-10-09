@@ -34,11 +34,17 @@ test('exact category mix, Uganda locations, positive UGX prices, licensed media,
   assert.equal(records.filter(r=>r.featured).length, 10);
 });
 
-test('preview media trust refuses arbitrary origins, credentials, query redirects and unrelated paths', () => {
-  const owned = 'https://dnbhomesbackend.onrender.com/media/images/2026-10-09/1234-abcd.jpg';
+test('preview media trust accepts only reviewed Commons files or fixed website showcase assets', () => {
+  const manifest = require('../scripts/data/uganda-preview-media.json');
+  const owned = 'https://dnbhomeswebsite-psi.vercel.app/images/uganda/showcase/optimized-single-room.jpg';
   assert.ok(isTrustedPreviewImage(owned));
-  assert.ok(isTrustedPreviewImage('https://upload.wikimedia.org/wikipedia/commons/a/ab/example.jpg'));
-  for (const url of ['https://example.com/photo.jpg', owned+'?redirect=https://example.com', owned+'#fragment', owned.replace('https:', 'http:'), owned.replace('https://', 'https://user:password@'), owned.replace('/media/images/', '/private/'), 'not-a-url']) assert.equal(isTrustedPreviewImage(url), false);
+  for (const source of manifest) {
+    assert.ok(isTrustedPreviewImage(source.originalUrl));
+    assert.ok(isTrustedPreviewImage(source.url));
+    assert.equal(new URL(source.url).hostname, 'dnbhomeswebsite-psi.vercel.app');
+    assert.equal(new URL(source.url).pathname, `/images/uganda/showcase/optimized-${source.id}.jpg`);
+  }
+  for (const url of ['https://example.com/photo.jpg', 'https://dnbhomesbackend.onrender.com/media/images/2026-10-09/1234-abcd.jpg', 'https://upload.wikimedia.org/wikipedia/commons/a/ab/unreviewed.jpg', owned+'?redirect=https://example.com', owned+'#fragment', owned.replace('https:', 'http:'), owned.replace('https://', 'https://user:password@'), owned.replace('/images/uganda/showcase/', '/private/'), owned.replace('optimized-single-room.jpg', 'unreviewed.jpg'), owned.replace('.vercel.app', '.vercel.app.example.com'), owned.replace('.app/', '.app:8443/'), 'not-a-url']) assert.equal(isTrustedPreviewImage(url), false);
 });
 
 test('real Mongo rerun retains 50 IDs, preserves unrelated inventory and view counts, removes only obsolete tagged records, refuses collisions', async () => {

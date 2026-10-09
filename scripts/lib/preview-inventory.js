@@ -2,13 +2,15 @@ const inventory = require('../data/uganda-preview-properties.json');
 const mediaManifest = require('../data/uganda-preview-media.json');
 const SEED_TAG = 'preview:uganda-showcase';
 const DISCLOSURE = 'Showcase listing for Homes preview. Property availability and exact details must be confirmed before viewing.';
+const reviewedCommonsImages = new Set(mediaManifest.map(source => new URL(source.originalUrl).href));
+const showcasePaths = new Set(mediaManifest.map(source => `/images/uganda/showcase/optimized-${source.id}.jpg`));
 
 function isTrustedPreviewImage(value) {
   let url;
   try { url = new URL(value); } catch { return false; }
   if (url.protocol !== 'https:' || url.username || url.password || url.port || url.search || url.hash) return false;
-  return (url.hostname === 'upload.wikimedia.org' && url.pathname.startsWith('/wikipedia/commons/')) ||
-    (url.hostname === 'dnbhomesbackend.onrender.com' && /^\/media\/images\/\d{4}-\d{2}-\d{2}\/[a-f0-9-]+\.jpg$/.test(url.pathname));
+  return (url.hostname === 'upload.wikimedia.org' && url.pathname.startsWith('/wikipedia/commons/') && reviewedCommonsImages.has(url.href)) ||
+    (url.hostname === 'dnbhomeswebsite-psi.vercel.app' && showcasePaths.has(url.pathname));
 }
 
 function requirePreviewDatabase(values, args) {
