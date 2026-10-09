@@ -12,7 +12,8 @@
     "seed:admin": "node scripts/seed-admin.js",
     "seed:demo": "node scripts/seed-demo-properties.js",
     "seed:demo:remove": "node scripts/remove-demo-properties.js",
-    "migrate:v1": "node scripts/migrate-v1.js"
+    "migrate:v1": "node scripts/migrate-v1.js",
+    "seed:preview": "node scripts/seed-preview.js"
   },
   "engines": { "node": ">=20" },
   "dependencies": {

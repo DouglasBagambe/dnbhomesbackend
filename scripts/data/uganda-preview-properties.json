@@ -1,0 +1,1801 @@
+[
+  {
+    "category": "ordinary-rental",
+    "title": "Self-contained room in Kisaasi",
+    "slug": "uganda-showcase-self-contained-room-in-kisaasi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kisaasi"
+    },
+    "price": {
+      "amount": 350000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 20,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A compact self-contained room with a private washroom and a small cooking corner in a shared residential compound. The example includes a prepaid power meter and an outdoor water point.",
+      "The layout illustrates a practical option in Kisaasi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "muzigo",
+      "rental-interior"
+    ],
+    "featured": true
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "Self-contained room in Nansana",
+    "slug": "uganda-showcase-self-contained-room-in-nansana",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Nansana"
+    },
+    "price": {
+      "amount": 300000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 18,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A straightforward room for one occupant, with a private washroom and space for basic furniture. Shared compound access leads towards local shops and public transport.",
+      "The layout illustrates a practical option in Nansana. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "single-room",
+      "muzigo"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "Self-contained room in Bweyogerere",
+    "slug": "uganda-showcase-self-contained-room-in-bweyogerere",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Bweyogerere"
+    },
+    "price": {
+      "amount": 400000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 22,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "An ordinary self-contained rental with tiled flooring and a small cooking area. The shared compound has a water point and pedestrian access from a neighbourhood road.",
+      "The layout illustrates a practical option in Bweyogerere. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "muzigo",
+      "rental-interior"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "Modest one-bedroom unit in Kajjansi",
+    "slug": "uganda-showcase-modest-one-bedroom-unit-in-kajjansi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kajjansi"
+    },
+    "price": {
+      "amount": 450000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 35,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A separate bedroom and sitting room provide a modest home near Kajjansi trading activity. This showcase includes a private washroom, cooking space and shared compound access.",
+      "The layout illustrates a practical option in Kajjansi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "One-bedroom compound unit in Makindye",
+    "slug": "uganda-showcase-one-bedroom-compound-unit-in-makindye",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Makindye"
+    },
+    "price": {
+      "amount": 500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 38,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A modest one-bedroom unit with a sitting room, indoor washroom and a compact kitchen. The illustrated compound offers shared parking and a gated entrance.",
+      "The layout illustrates a practical option in Makindye. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "One-bedroom compound unit in Namugongo",
+    "slug": "uganda-showcase-one-bedroom-compound-unit-in-namugongo",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Namugongo"
+    },
+    "price": {
+      "amount": 550000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 40,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A practical one-bedroom rental with a small living area and indoor kitchen. Shared parking, a perimeter wall and a water tank are part of this example.",
+      "The layout illustrates a practical option in Namugongo. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "Compact one-bedroom unit in Bukoto",
+    "slug": "uganda-showcase-compact-one-bedroom-unit-in-bukoto",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Bukoto"
+    },
+    "price": {
+      "amount": 650000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 42,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "A compact unit with a separate bedroom, sitting room and private washroom. The example has a cooking area, prepaid power and convenient access to everyday shopping.",
+      "The layout illustrates a practical option in Bukoto. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "ordinary-rental",
+    "title": "One-bedroom courtyard unit in Kiwatule",
+    "slug": "uganda-showcase-one-bedroom-courtyard-unit-in-kiwatule",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kiwatule"
+    },
+    "price": {
+      "amount": 800000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 45,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "paragraphs": [
+      "An uncomplicated one-bedroom home opening onto a shared courtyard. The layout includes an indoor kitchen, water storage and space for one vehicle subject to compound rules.",
+      "The layout illustrates a practical option in Kiwatule. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Two-bedroom apartment in Ntinda",
+    "slug": "uganda-showcase-two-bedroom-apartment-in-ntinda",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Ntinda"
+    },
+    "price": {
+      "amount": 1500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 93,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 2-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Ntinda. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-apartments",
+      "entebbe-apartment"
+    ],
+    "featured": true
+  },
+  {
+    "category": "apartment",
+    "title": "One-bedroom apartment in Kiwatule",
+    "slug": "uganda-showcase-one-bedroom-apartment-in-kiwatule",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kiwatule"
+    },
+    "price": {
+      "amount": 850000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 69,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 1-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Kiwatule. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "apartments-home",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Two-bedroom apartment in Kyanja",
+    "slug": "uganda-showcase-two-bedroom-apartment-in-kyanja",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kyanja"
+    },
+    "price": {
+      "amount": 1200000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 93,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 2-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Kyanja. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-block",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Two-bedroom apartment in Najjera",
+    "slug": "uganda-showcase-two-bedroom-apartment-in-najjera",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Najjera"
+    },
+    "price": {
+      "amount": 1300000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 93,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 2-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Najjera. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-apartments",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Two-bedroom apartment in Naalya",
+    "slug": "uganda-showcase-two-bedroom-apartment-in-naalya",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Naalya"
+    },
+    "price": {
+      "amount": 1800000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 93,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 2-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Naalya. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "apartments-home",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "One-bedroom apartment in Bukoto",
+    "slug": "uganda-showcase-one-bedroom-apartment-in-bukoto",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Bukoto"
+    },
+    "price": {
+      "amount": 1100000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 69,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 1-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Bukoto. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-block",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Three-bedroom apartment in Bugolobi",
+    "slug": "uganda-showcase-three-bedroom-apartment-in-bugolobi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Bugolobi"
+    },
+    "price": {
+      "amount": 3500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 117,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 3-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Bugolobi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-apartments",
+      "entebbe-apartment"
+    ],
+    "featured": true
+  },
+  {
+    "category": "apartment",
+    "title": "Three-bedroom apartment in Muyenga",
+    "slug": "uganda-showcase-three-bedroom-apartment-in-muyenga",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Muyenga"
+    },
+    "price": {
+      "amount": 2800000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 117,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 3-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Muyenga. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "apartments-home",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "Two-bedroom apartment in Bunga",
+    "slug": "uganda-showcase-two-bedroom-apartment-in-bunga",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Bunga"
+    },
+    "price": {
+      "amount": 1700000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 93,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 2-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Bunga. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-block",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "apartment",
+    "title": "One-bedroom apartment in Makindye",
+    "slug": "uganda-showcase-one-bedroom-apartment-in-makindye",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Makindye"
+    },
+    "price": {
+      "amount": 700000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 69,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Balcony",
+      "Fitted kitchen",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A 1-bedroom apartment with a separate living space, fitted kitchen and balcony. This example includes shared parking, controlled compound access and a water tank for everyday use.",
+      "The layout illustrates a practical option in Makindye. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-apartments",
+      "entebbe-apartment"
+    ],
+    "featured": false
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Kira",
+    "slug": "uganda-showcase-family-bungalow-in-kira",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kira"
+    },
+    "price": {
+      "amount": 1800000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 140,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 3-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Kira. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": true
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Namugongo",
+    "slug": "uganda-showcase-family-bungalow-in-namugongo",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Namugongo"
+    },
+    "price": {
+      "amount": 1500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 125,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 3-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Namugongo. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Bweyogerere",
+    "slug": "uganda-showcase-family-bungalow-in-bweyogerere",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Bweyogerere"
+    },
+    "price": {
+      "amount": 900000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 90,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 2-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Bweyogerere. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Kitende",
+    "slug": "uganda-showcase-family-bungalow-in-kitende",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kitende"
+    },
+    "price": {
+      "amount": 2200000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 150,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 3-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Kitende. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Lubowa",
+    "slug": "uganda-showcase-family-bungalow-in-lubowa",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Lubowa"
+    },
+    "price": {
+      "amount": 4500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 4,
+    "bathrooms": 2,
+    "size": 230,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 4-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Lubowa. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": true
+  },
+  {
+    "category": "family-house-rent",
+    "title": "Family bungalow in Kasangati",
+    "slug": "uganda-showcase-family-bungalow-in-kasangati",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kasangati"
+    },
+    "price": {
+      "amount": 1200000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 120,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Gated compound",
+      "Parking",
+      "Water tank",
+      "Garden"
+    ],
+    "paragraphs": [
+      "A 3-bedroom bungalow with separate living and dining areas and an outdoor compound. The showcase layout allows family use, parking and a small garden, with access from a local residential road.",
+      "The layout illustrates a practical option in Kasangati. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "mukono-house",
+      "home-setting"
+    ],
+    "featured": false
+  },
+  {
+    "category": "residential-sale",
+    "title": "Two-bedroom bungalow in Nansana",
+    "slug": "uganda-showcase-two-bedroom-bungalow-in-nansana",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Nansana"
+    },
+    "price": {
+      "amount": 160000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 90,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 2 bedrooms, separate living space and an everyday kitchen. The compound illustrates private parking and room for outdoor family use. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Nansana. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "residential-sale",
+    "title": "Three-bedroom family bungalow in Kira",
+    "slug": "uganda-showcase-three-bedroom-family-bungalow-in-kira",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kira"
+    },
+    "price": {
+      "amount": 320000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 140,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 3 bedrooms, separate living space and an everyday kitchen. The compound illustrates private parking and room for outdoor family use. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Kira. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": true
+  },
+  {
+    "category": "residential-sale",
+    "title": "Two-bedroom apartment for sale in Naalya",
+    "slug": "uganda-showcase-two-bedroom-apartment-for-sale-in-naalya",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Naalya"
+    },
+    "price": {
+      "amount": 260000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 90,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 2 bedrooms, separate living space and an everyday kitchen. The apartment illustrates a shared compound and designated parking. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Naalya. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kololo-block",
+      "apartments-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "residential-sale",
+    "title": "Four-bedroom family home in Kyanja",
+    "slug": "uganda-showcase-four-bedroom-family-home-in-kyanja",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kyanja"
+    },
+    "price": {
+      "amount": 650000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 4,
+    "bathrooms": 2,
+    "size": 210,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 4 bedrooms, separate living space and an everyday kitchen. The compound illustrates private parking and room for outdoor family use. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Kyanja. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "residential-sale",
+    "title": "Family home with garden in Lubowa",
+    "slug": "uganda-showcase-family-home-with-garden-in-lubowa",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Lubowa"
+    },
+    "price": {
+      "amount": 950000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 4,
+    "bathrooms": 2,
+    "size": 260,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 4 bedrooms, separate living space and an everyday kitchen. The compound illustrates private parking and room for outdoor family use. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Lubowa. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "residential-sale",
+    "title": "Five-bedroom hillside home in Muyenga",
+    "slug": "uganda-showcase-five-bedroom-hillside-home-in-muyenga",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Muyenga"
+    },
+    "price": {
+      "amount": 1400000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 5,
+    "bathrooms": 2,
+    "size": 330,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Fitted kitchen",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A residential sale example with 5 bedrooms, separate living space and an everyday kitchen. The compound illustrates private parking and room for outdoor family use. The asking price is a market-informed showcase figure; no legal title or seller appointment is claimed.",
+      "The layout illustrates a practical option in Muyenga. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "urban-home",
+      "gated-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "50x100 residential plot in Bujjuko",
+    "slug": "uganda-showcase-50x100-residential-plot-in-bujjuko",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Bujjuko"
+    },
+    "price": {
+      "amount": 25000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 464.5,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A 50 by 100 foot residential plot example in an outer Kampala commuter area. The indicative layout leaves room for a modest home and compound; access is via a local feeder road.",
+      "The layout illustrates a practical option in Bujjuko. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "garden",
+      "bweyale-garden"
+    ],
+    "featured": true
+  },
+  {
+    "category": "land",
+    "title": "50x100 plot in Namayumba",
+    "slug": "uganda-showcase-50x100-plot-in-namayumba",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Namayumba"
+    },
+    "price": {
+      "amount": 15000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 464.5,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "An entry-level 50 by 100 foot plot example near Namayumba trading activity. The setting illustrates lower-density growth rather than an established Kampala estate.",
+      "The layout illustrates a practical option in Namayumba. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "grassland",
+      "bweyale-garden"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "100x100 residential plot in Kira",
+    "slug": "uganda-showcase-100x100-residential-plot-in-kira",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kira"
+    },
+    "price": {
+      "amount": 180000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 929,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A 100 by 100 foot residential plot example in Kira. The illustrative area is approximately 23 decimals, with space to consider a family home subject to planning and boundary checks.",
+      "The layout illustrates a practical option in Kira. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "bweyale-garden",
+      "grassland"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "25-decimal development plot in Sonde",
+    "slug": "uganda-showcase-25-decimal-development-plot-in-sonde",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Mukono",
+      "area": "Sonde"
+    },
+    "price": {
+      "amount": 85000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 0.25,
+    "sizeUnit": "acres",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A quarter-acre plot example for a small residential development in Sonde. The indicative size is 25 decimals; drainage and construction suitability must be assessed before any design commitment.",
+      "The layout illustrates a practical option in Sonde. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "garden",
+      "bweyale-garden"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "Mixed-use plot in Mukono Town",
+    "slug": "uganda-showcase-mixed-use-plot-in-mukono-town",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Mukono",
+      "area": "Mukono Town"
+    },
+    "price": {
+      "amount": 120000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 600,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A small mixed-use land example near Mukono Town trading activity. It illustrates potential for a shop and residential space only where permitted by the relevant planning authority.",
+      "The layout illustrates a practical option in Mukono Town. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "grassland",
+      "bweyale-garden"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "One-acre land parcel near Wakiso Town",
+    "slug": "uganda-showcase-one-acre-land-parcel-near-wakiso-town",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Wakiso Town"
+    },
+    "price": {
+      "amount": 140000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 1,
+    "sizeUnit": "acres",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A one-acre parcel example on the outskirts of Wakiso Town, with space for a low-density residential concept or garden. Feeder-road access and utility extension costs require independent checks.",
+      "The layout illustrates a practical option in Wakiso Town. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "bweyale-garden",
+      "grassland"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "20-decimal residential land in Entebbe",
+    "slug": "uganda-showcase-20-decimal-residential-land-in-entebbe",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Entebbe"
+    },
+    "price": {
+      "amount": 160000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 0.2,
+    "sizeUnit": "acres",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A 20-decimal residential land example in the Entebbe area. The showcase price reflects a more established town setting; it makes no claim of a lake view, exact address or confirmed tenure.",
+      "The layout illustrates a practical option in Entebbe. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "garden",
+      "bweyale-garden"
+    ],
+    "featured": false
+  },
+  {
+    "category": "land",
+    "title": "Half-acre residential land in Garuga",
+    "slug": "uganda-showcase-half-acre-residential-land-in-garuga",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Garuga"
+    },
+    "price": {
+      "amount": 230000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "land",
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "size": 0.5,
+    "sizeUnit": "acres",
+    "amenities": [
+      "Road access"
+    ],
+    "paragraphs": [
+      "A half-acre residential parcel example in Garuga, with room for a home and outdoor space. Road condition, water supply and drainage should be checked at the actual site.",
+      "The layout illustrates a practical option in Garuga. Access, boundaries, drainage, permitted use and utility connections need an on-site assessment; no ownership or tenure guarantee is made."
+    ],
+    "mediaIds": [
+      "grassland",
+      "bweyale-garden"
+    ],
+    "featured": false
+  },
+  {
+    "category": "commercial",
+    "title": "Small shop space in Nansana",
+    "slug": "uganda-showcase-small-shop-space-in-nansana",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Nansana"
+    },
+    "price": {
+      "amount": 450000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "commercial",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 22,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access",
+      "Power connection"
+    ],
+    "paragraphs": [
+      "A compact shopfront example suited to a small retail operation. The layout includes a shuttered entrance, power point and space for shelving; trading permissions and service charges require confirmation.",
+      "The layout illustrates a practical option in Nansana. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kampala-commercial"
+    ],
+    "featured": false
+  },
+  {
+    "category": "commercial",
+    "title": "Office space in Ntinda",
+    "slug": "uganda-showcase-office-space-in-ntinda",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Ntinda"
+    },
+    "price": {
+      "amount": 1800000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "commercial",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 75,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access",
+      "Power connection"
+    ],
+    "paragraphs": [
+      "A practical office example with an open work area, a small meeting room and access to shared washrooms. Parking allocation and connectivity arrangements should be agreed before occupation.",
+      "The layout illustrates a practical option in Ntinda. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kampala-commercial"
+    ],
+    "featured": false
+  },
+  {
+    "category": "commercial",
+    "title": "Roadside commercial building in Mukono",
+    "slug": "uganda-showcase-roadside-commercial-building-in-mukono",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Mukono",
+      "area": "Mukono Town"
+    },
+    "price": {
+      "amount": 420000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "commercial",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 180,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access",
+      "Power connection"
+    ],
+    "paragraphs": [
+      "A roadside building example with ground-floor retail space and upper rooms for compatible business use. Road frontage, permitted use and ownership documentation require independent inspection; no current tenancy income is promised.",
+      "The layout illustrates a practical option in Mukono Town. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kampala-commercial"
+    ],
+    "featured": true
+  },
+  {
+    "category": "commercial",
+    "title": "Warehouse workspace in Bweyogerere",
+    "slug": "uganda-showcase-warehouse-workspace-in-bweyogerere",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Bweyogerere"
+    },
+    "price": {
+      "amount": 3500000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "commercial",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 250,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Road access",
+      "Power connection"
+    ],
+    "paragraphs": [
+      "A simple warehouse and workspace example with a wide loading entrance and a small administrative area. Heavy-vehicle access, power capacity and permitted operations need confirmation for the intended business.",
+      "The layout illustrates a practical option in Bweyogerere. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "kampala-commercial"
+    ],
+    "featured": false
+  },
+  {
+    "category": "short-stay",
+    "title": "Furnished studio in Kisubi",
+    "slug": "uganda-showcase-furnished-studio-in-kisubi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kisubi"
+    },
+    "price": {
+      "amount": 130000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "serviced_apartment",
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "size": 35,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Kitchen",
+      "Wi-Fi",
+      "Parking"
+    ],
+    "paragraphs": [
+      "A furnished short-stay example with a combined sleeping and living area, cooking facilities and an indoor washroom. The nightly asking figure is illustrative; cleaning fees, Wi-Fi reliability, check-in arrangements and any minimum stay need confirmation.",
+      "The layout illustrates a practical option in Kisubi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "entebbe-apartment",
+      "apartments-home"
+    ],
+    "featured": true
+  },
+  {
+    "category": "short-stay",
+    "title": "Serviced one-bedroom apartment in Ntinda",
+    "slug": "uganda-showcase-serviced-one-bedroom-apartment-in-ntinda",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Ntinda"
+    },
+    "price": {
+      "amount": 120000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "serviced_apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 60,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Kitchen",
+      "Wi-Fi",
+      "Parking"
+    ],
+    "paragraphs": [
+      "A furnished short-stay example with 1 separate bedroom, cooking facilities and an indoor washroom. The nightly asking figure is illustrative; cleaning fees, Wi-Fi reliability, check-in arrangements and any minimum stay need confirmation.",
+      "The layout illustrates a practical option in Ntinda. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "entebbe-apartment",
+      "apartments-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "short-stay",
+    "title": "Furnished two-bedroom apartment in Muyenga",
+    "slug": "uganda-showcase-furnished-two-bedroom-apartment-in-muyenga",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Muyenga"
+    },
+    "price": {
+      "amount": 220000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "serviced_apartment",
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "size": 85,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Kitchen",
+      "Wi-Fi",
+      "Parking"
+    ],
+    "paragraphs": [
+      "A furnished short-stay example with 2 separate bedrooms, cooking facilities and an indoor washroom. The nightly asking figure is illustrative; cleaning fees, Wi-Fi reliability, check-in arrangements and any minimum stay need confirmation.",
+      "The layout illustrates a practical option in Muyenga. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "entebbe-apartment",
+      "apartments-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "short-stay",
+    "title": "Serviced apartment in Bugolobi",
+    "slug": "uganda-showcase-serviced-apartment-in-bugolobi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Bugolobi"
+    },
+    "price": {
+      "amount": 180000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "serviced_apartment",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 60,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Kitchen",
+      "Wi-Fi",
+      "Parking"
+    ],
+    "paragraphs": [
+      "A furnished short-stay example with 1 separate bedroom, cooking facilities and an indoor washroom. The nightly asking figure is illustrative; cleaning fees, Wi-Fi reliability, check-in arrangements and any minimum stay need confirmation.",
+      "The layout illustrates a practical option in Bugolobi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "entebbe-apartment",
+      "apartments-home"
+    ],
+    "featured": false
+  },
+  {
+    "category": "hotel-guest-house",
+    "title": "Hotel room offering in Kampala",
+    "slug": "uganda-showcase-hotel-room-offering-in-kampala",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Makindye"
+    },
+    "price": {
+      "amount": 150000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "hotel",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 26,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Private washroom",
+      "Reception"
+    ],
+    "paragraphs": [
+      "A hotel-room showcase with a double bed, private washroom and reception access. The nightly figure illustrates a mid-market room; meals, check-in times and cancellation conditions are subject to confirmation.",
+      "The layout illustrates a practical option in Makindye. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "hotel-building"
+    ],
+    "featured": true
+  },
+  {
+    "category": "hotel-guest-house",
+    "title": "Guest-house room in Katabi",
+    "slug": "uganda-showcase-guest-house-room-in-katabi",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Katabi"
+    },
+    "price": {
+      "amount": 90000,
+      "currency": "UGX",
+      "period": "night"
+    },
+    "purpose": "short_stay",
+    "type": "guest_house",
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "size": 22,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Furnished",
+      "Private washroom",
+      "Parking"
+    ],
+    "paragraphs": [
+      "A straightforward guest-house room example in Katabi, with an indoor washroom and shared parking. Airport transfers and breakfast are not assumed to be included in the nightly figure.",
+      "The layout illustrates a practical option in Katabi. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "hotel-building"
+    ],
+    "featured": false
+  },
+  {
+    "category": "upcountry",
+    "title": "Three-bedroom bungalow in Fort Portal",
+    "slug": "uganda-showcase-three-bedroom-bungalow-in-fort-portal",
+    "location": {
+      "country": "Uganda",
+      "region": "Western",
+      "district": "Fort Portal",
+      "area": "Fort Portal"
+    },
+    "price": {
+      "amount": 1200000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 125,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Garden",
+      "Parking",
+      "Water tank"
+    ],
+    "paragraphs": [
+      "A three-bedroom rental example with separate living space, a kitchen and a garden compound in Fort Portal. The layout illustrates a practical upcountry family home with local-road access and on-site parking.",
+      "The layout illustrates a practical option in Fort Portal. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "fort-portal-house"
+    ],
+    "featured": false
+  },
+  {
+    "category": "upcountry",
+    "title": "Family bungalow for sale in Mbarara",
+    "slug": "uganda-showcase-family-bungalow-for-sale-in-mbarara",
+    "location": {
+      "country": "Uganda",
+      "region": "Western",
+      "district": "Mbarara",
+      "area": "Mbarara City"
+    },
+    "price": {
+      "amount": 280000000,
+      "currency": "UGX",
+      "period": "total"
+    },
+    "purpose": "sale",
+    "type": "house",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "size": 135,
+    "sizeUnit": "sqm",
+    "amenities": [
+      "Parking",
+      "Water tank",
+      "Perimeter wall"
+    ],
+    "paragraphs": [
+      "A three-bedroom family sale example in Mbarara City with a separate living room, kitchen and outdoor compound. The illustrative asking figure reflects an upcountry residential option; ownership, boundaries and utilities require independent confirmation.",
+      "The layout illustrates a practical option in Mbarara City. Water and power arrangements, access, maintenance responsibilities and any additional charges should be checked at a viewing."
+    ],
+    "mediaIds": [
+      "home-setting",
+      "mukono-house"
+    ],
+    "featured": false
+  }
+]
