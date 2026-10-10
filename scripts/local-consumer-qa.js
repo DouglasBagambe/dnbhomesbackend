@@ -3,9 +3,11 @@ const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
 if(process.env.NODE_ENV && !['test','development'].includes(process.env.NODE_ENV)) throw new Error('Local QA cannot run in a hosted environment');
+const port = Number(process.env.HOMES_QA_PORT || 3100);
+if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Invalid local QA port');
 process.env.NODE_ENV='test';process.env.ENV_FILE=path.join(os.tmpdir(),'homes-no-env-file');process.env.LOG_LEVEL='silent';
 process.env.CONSUMER_ACCOUNTS_ENABLED='true';process.env.CONSUMER_AUTH_SECRET=crypto.randomBytes(48).toString('base64url');
-process.env.CONSUMER_AUTH_URL='http://127.0.0.1:3100';process.env.CORS_ORIGINS='http://127.0.0.1:3101';process.env.CONSUMER_MAIL_DRIVER='local';
+process.env.CONSUMER_AUTH_URL=`http://127.0.0.1:${port}`;process.env.CORS_ORIGINS='http://127.0.0.1:3101';process.env.CONSUMER_MAIL_DRIVER='local';
 (async()=>{
  const folder=process.env.CONSUMER_MAIL_LOCAL_PATH || await fs.mkdtemp(path.join(os.tmpdir(),'homes-account-browser-'));
  await fs.mkdir(folder,{recursive:true,mode:0o700});process.env.CONSUMER_MAIL_LOCAL_PATH=folder;
@@ -21,8 +23,8 @@ process.env.CONSUMER_AUTH_URL='http://127.0.0.1:3100';process.env.CORS_ORIGINS='
  if(process.env.HOMES_QA_CONTROL_PATH) {
   const adminPassword=crypto.randomBytes(24).toString('base64url');
   await require('../src/modules/auth/admin.model').create({name:'Isolated QA Admin',email:'admin@homes-local-qa.invalid',passwordHash:await require('bcryptjs').hash(adminPassword,12),role:'super_admin',status:'active'});
-  await fs.writeFile(process.env.HOMES_QA_CONTROL_PATH,JSON.stringify({localOnly:true,api:'http://127.0.0.1:3100/api/v1',email:'admin@homes-local-qa.invalid',password:adminPassword}),{mode:0o600});
+  await fs.writeFile(process.env.HOMES_QA_CONTROL_PATH,JSON.stringify({localOnly:true,api:`http://127.0.0.1:${port}/api/v1`,email:'admin@homes-local-qa.invalid',password:adminPassword}),{mode:0o600});
  }
- const server=require('../src/app').createApp().listen(3100,'127.0.0.1',()=>console.log('Isolated account QA API ready on loopback port 3100; no hosted database connection.'));
+ const server=require('../src/app').createApp().listen(port,'127.0.0.1',()=>console.log(`Isolated account QA API ready on loopback port ${port}; no hosted database connection.`));
  const stop=async()=>{server.close();await disconnectDatabase();await mongo.stop();process.exit(0);};process.on('SIGTERM',stop);process.on('SIGINT',stop);
 })().catch(error=>{console.error(error.message);process.exit(1);});
