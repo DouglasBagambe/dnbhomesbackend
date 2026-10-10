@@ -8,6 +8,44 @@ const sortMap = { newest: { publishedAt: -1 }, oldest: { publishedAt: 1 }, price
 const allowedFields = ["title", "description", "purpose", "type", "price", "location", "bedrooms", "bathrooms", "size", "sizeUnit", "amenities", "tags", "media", "cover", "agent", "agency", "featured", "verificationStatus", "status", "legacyAgent"];
 const pick = (body) => Object.fromEntries(allowedFields.filter((key) => body[key] !== undefined).map((key) => [key, body[key]]));
 
+const QA_MEDIA_HOST = "https://dnbhomeswebsite-psi.vercel.app";
+const QA_MEDIA_IMAGE_PATHS = [
+  "/images/uganda/showcase/optimized-apartments-home.jpg",
+  "/images/uganda/showcase/optimized-bweyale-garden.jpg",
+  "/images/uganda/showcase/optimized-entebbe-apartment.jpg",
+  "/images/uganda/showcase/optimized-fort-portal-house.jpg",
+  "/images/uganda/showcase/optimized-garden.jpg",
+  "/images/uganda/showcase/optimized-gated-home.jpg",
+  "/images/uganda/showcase/optimized-grassland.jpg",
+  "/images/uganda/showcase/optimized-home-setting.jpg",
+  "/images/uganda/showcase/optimized-hotel-building.jpg",
+  "/images/uganda/showcase/optimized-kampala-commercial.jpg",
+  "/images/uganda/showcase/optimized-kololo-apartments.jpg",
+  "/images/uganda/showcase/optimized-kololo-block.jpg",
+  "/images/uganda/showcase/optimized-mukono-house.jpg",
+  "/images/uganda/showcase/optimized-muzigo.jpg",
+  "/images/uganda/showcase/optimized-rental-interior.jpg",
+  "/images/uganda/showcase/optimized-single-room.jpg",
+  "/images/uganda/showcase/optimized-urban-home.jpg",
+  "/images/uganda/gated-home.jpg",
+  "/images/uganda/grassland.jpg",
+  "/images/uganda/hotel-building.jpg",
+];
+const QA_MEDIA_VIDEO_PATHS = [1,2,3,4,5].map((index) => `/qa/video-${index}.webm`);
+function durableQaMedia(item) {
+  const plain = item?.toObject ? item.toObject() : item;
+  if (!plain || !Array.isArray(plain.tags) || !plain.tags.includes("qa:media-heavy")) return item;
+  const hasEphemeralMedia = Array.isArray(plain.media) && plain.media.some((entry) =>
+    typeof entry?.url === "string" && /^https:\/\/dnbhomesbackend\.onrender\.com\/media\//.test(entry.url)
+  );
+  if (!hasEphemeralMedia) return item;
+  const media = [
+    ...QA_MEDIA_IMAGE_PATHS.map((path, index) => ({ type: "image", url: `${QA_MEDIA_HOST}${path}`, alt: `Synthetic QA property image ${index + 1}` })),
+    ...QA_MEDIA_VIDEO_PATHS.map((path, index) => ({ type: "video", url: `${QA_MEDIA_HOST}${path}`, alt: `Synthetic QA property video ${index + 1}` })),
+  ];
+  return { ...plain, media, cover: media[0] };
+}
+
 async function uniqueSlug(title, ignoredId) {
   const base = slugify(title) || "property"; let slug = base; let suffix = 2;
   while (await Property.exists({ slug, ...(ignoredId ? { _id: { $ne: ignoredId } } : {}) })) slug = `${base}-${suffix++}`;
@@ -73,7 +111,7 @@ async function listPublic(query) {
     records = Property.aggregate([{ $match: filter }, { $set: { _searchRelevance: relevance(query) } }, { $sort: searchSort }, { $skip: (page-1)*limit }, { $limit: limit }, { $unset: "_searchRelevance" }]).option({ maxTimeMS: 3000 }).then(data => Property.populate(data, { path: "agent agency" }));
   } else records = Property.find(filter).populate("agent agency").sort(sort).skip((page-1)*limit).limit(limit).maxTimeMS(3000).lean();
   const [data, total] = await Promise.all([records, Property.countDocuments(filter).maxTimeMS(3000)]);
-  return { data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return { data: data.map(durableQaMedia), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
 }
 
 async function getPublic(idOrSlug) {
@@ -81,7 +119,7 @@ async function getPublic(idOrSlug) {
   const item = await Property.findOne({ ...selector, status: "published" }).populate("agent agency").lean();
   if (!item) throw notFound("Property not found");
   void Property.updateOne({ _id: item._id }, { $inc: { viewCount: 1 } }).catch(() => {});
-  return item;
+  return durableQaMedia(item);
 }
 
 async function listAdmin(query) {
@@ -89,11 +127,11 @@ async function listAdmin(query) {
   for (const field of ["status", "purpose", "type", "featured", "verificationStatus", "agent", "agency"]) if (query[field] !== undefined && query[field] !== "") filter[field] = query[field];
   if (query.q) filter.$text = { $search: String(query.q).slice(0, 100) };
   const [data, total] = await Promise.all([Property.find(filter).populate("agent agency").sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit), Property.countDocuments(filter)]);
-  return { data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return { data: data.map(durableQaMedia), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
 }
 
 async function create(body) { validateProperty(body); const data = pick(body); data.slug = await uniqueSlug(data.title); if (data.status === "published") data.publishedAt = new Date(); return Property.create(data); }
 async function update(id, body) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); validateProperty(body, true); const property = await Property.findById(id); if (!property) throw notFound("Property not found"); const data = pick(body); if (body.media !== undefined && body.cover === undefined) data.cover = body.media.find(item => item.type === "image"); if (data.title && data.title !== property.title) data.slug = await uniqueSlug(data.title, id); if (data.status === "published" && property.status !== "published") data.publishedAt = new Date(); if (data.status === "archived") data.archivedAt = new Date(); Object.assign(property, data); return property.save(); }
-async function getAdmin(id) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); const item = await Property.findById(id).populate("agent agency"); if (!item) throw notFound("Property not found"); return item; }
+async function getAdmin(id) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); const item = await Property.findById(id).populate("agent agency"); if (!item) throw notFound("Property not found"); return durableQaMedia(item); }
 
 module.exports = { listPublic, getPublic, listAdmin, getAdmin, create, update };
