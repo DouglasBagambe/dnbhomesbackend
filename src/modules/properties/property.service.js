@@ -23,7 +23,18 @@ function publicFilter(query) {
   if (query.bedrooms) filter.bedrooms = { $gte: Number(query.bedrooms) };
   if (query.bathrooms) filter.bathrooms = { $gte: Number(query.bathrooms) };
   if (query.amenities) filter.amenities = { $all: String(query.amenities).split(",").map((v) => v.trim()).filter(Boolean) };
-  if (query.q) filter.$text = { $search: String(query.q).slice(0, 100) };
+  if (query.q) {
+    const terms = searchTerms(query.q);
+    // Text-index candidates first; each significant literal must occur in the
+    // indexed fields. Mongo's default OR alone makes multi-word searches broad.
+    if (!terms.length) filter._id = { $in: [] };
+    else {
+      filter.$text = { $search: terms.join(" ") };
+      filter.$and = terms.map(term => ({ $or: searchFields.map(field => ({
+        [field]: new RegExp(`(?:^|[^\\p{L}\\p{N}])${termPattern(term)}(?:$|[^\\p{L}\\p{N}])`, "iu"),
+      })) }));
+    }
+  }
   if (query.latitude && query.longitude) {
     const radius = Math.min(Math.max(Number(query.radius || 10), 1), 200) * 1000;
     filter["location.coordinates"] = { $geoWithin: { $centerSphere: [[Number(query.longitude), Number(query.latitude)], radius / 6378100] } };
@@ -31,10 +42,37 @@ function publicFilter(query) {
   return filter;
 }
 
+const searchFields = ["title", "description", "location.address", "location.area", "location.district"];
+const stopWords = new Set(["a", "an", "and", "the", "in", "at", "of", "for", "to", "with"]);
+const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const pluralTerms = new Set(["apartment", "home", "house", "room", "plot", "office", "rental", "shop", "villa", "bungalow", "hotel", "bedroom", "bathroom"]);
+function canonicalTerm(term) { return term.endsWith("s") && pluralTerms.has(term.slice(0,-1)) ? term.slice(0,-1) : term; }
+function termPattern(term) { return `${escapeRegex(term)}${pluralTerms.has(term) ? "s?" : ""}`; }
+function searchTerms(value) {
+  return [...new Set((String(value).normalize("NFKC").slice(0, 100).toLowerCase().match(/[\p{L}\p{N}]+/gu) || []).filter(term => !stopWords.has(term)).map(canonicalTerm))].slice(0, 12);
+}
+function relevance(query) {
+  const words = String(query.q).normalize("NFKC").slice(0,100).toLowerCase().match(/[\p{L}\p{N}]+/gu) || [];
+  const phrase = words.map(escapeRegex).join("[\\s\\p{P}]+");
+  const match = (field, regex, weight) => ({ $cond: [{ $regexMatch: { input: { $ifNull: [`$${field}`, ""] }, regex, options: "i" } }, weight, 0] });
+  return { $add: [
+    { $meta: "textScore" },
+    match("title", `^\\s*${phrase}\\s*$`, 100),
+    match("title", phrase, 50),
+    ...searchTerms(query.q).flatMap(term => [match("title", termPattern(term), 4), match("location.area", `^${escapeRegex(term)}$`, 3)]),
+  ] };
+}
 async function listPublic(query) {
   const page = Math.max(Number(query.page) || 1, 1); const limit = Math.min(Math.max(Number(query.limit) || 20, 1), 50);
-  const filter = publicFilter(query); const sort = sortMap[query.sort] || sortMap.newest;
-  const [data, total] = await Promise.all([Property.find(filter).populate("agent agency").sort(sort).skip((page - 1) * limit).limit(limit).lean(), Property.countDocuments(filter)]);
+  const filter = publicFilter(query); const sort = { ...(sortMap[query.sort] || sortMap.newest), _id: 1 };
+  let records;
+  if (filter.$text) {
+    // Relevance is the default for searches; explicit price/oldest/popular
+    // choices retain their ordering. Stable _id tie-breaks preserve pagination.
+    const searchSort = !query.sort || query.sort === "newest" ? { _searchRelevance: -1, ...sort } : sort;
+    records = Property.aggregate([{ $match: filter }, { $set: { _searchRelevance: relevance(query) } }, { $sort: searchSort }, { $skip: (page-1)*limit }, { $limit: limit }, { $unset: "_searchRelevance" }]).option({ maxTimeMS: 3000 }).then(data => Property.populate(data, { path: "agent agency" }));
+  } else records = Property.find(filter).populate("agent agency").sort(sort).skip((page-1)*limit).limit(limit).maxTimeMS(3000).lean();
+  const [data, total] = await Promise.all([records, Property.countDocuments(filter).maxTimeMS(3000)]);
   return { data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
 }
 
@@ -55,7 +93,7 @@ async function listAdmin(query) {
 }
 
 async function create(body) { validateProperty(body); const data = pick(body); data.slug = await uniqueSlug(data.title); if (data.status === "published") data.publishedAt = new Date(); return Property.create(data); }
-async function update(id, body) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); validateProperty(body, true); const property = await Property.findById(id); if (!property) throw notFound("Property not found"); const data = pick(body); if (data.title && data.title !== property.title) data.slug = await uniqueSlug(data.title, id); if (data.status === "published" && property.status !== "published") data.publishedAt = new Date(); if (data.status === "archived") data.archivedAt = new Date(); Object.assign(property, data); return property.save(); }
+async function update(id, body) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); validateProperty(body, true); const property = await Property.findById(id); if (!property) throw notFound("Property not found"); const data = pick(body); if (body.media !== undefined && body.cover === undefined) data.cover = body.media.find(item => item.type === "image"); if (data.title && data.title !== property.title) data.slug = await uniqueSlug(data.title, id); if (data.status === "published" && property.status !== "published") data.publishedAt = new Date(); if (data.status === "archived") data.archivedAt = new Date(); Object.assign(property, data); return property.save(); }
 async function getAdmin(id) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); const item = await Property.findById(id).populate("agent agency"); if (!item) throw notFound("Property not found"); return item; }
 
 module.exports = { listPublic, getPublic, listAdmin, getAdmin, create, update };

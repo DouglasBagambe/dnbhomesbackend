@@ -11,7 +11,10 @@ function errorHandler(error, req, res, next) { // eslint-disable-line no-unused-
   let code = error.code || "INTERNAL_ERROR";
   let message = error.message || "An unexpected error occurred";
   let details = error.details;
-  if (error instanceof mongoose.Error.CastError) {
+  if (error.name === "MulterError") {
+    status = error.code === "LIMIT_FILE_SIZE" ? 413 : 400; code = error.code;
+    message = error.code === "LIMIT_FILE_SIZE" ? "Videos must not exceed 50 MB; images must not exceed 10 MB" : "Upload at most 10 files per request"; details = undefined;
+  } else if (error instanceof mongoose.Error.CastError) {
     status = 400; code = "INVALID_ID"; message = "Invalid resource identifier"; details = undefined;
   } else if (error instanceof mongoose.Error.ValidationError) {
     status = 400; code = "VALIDATION_ERROR"; message = "Request validation failed";

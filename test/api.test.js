@@ -60,3 +60,121 @@ test("failed sign-ins are rate limited with the API JSON contract", async () => 
   assert.equal(response.body.error.code, "RATE_LIMITED");
   assert.ok(response.headers["retry-after"]);
 });
+
+test("guest viewing status uses a one-time-issued 256-bit token and never reveals PII", async () => {
+  const Booking = require('../src/modules/bookings/booking.model');
+  const property = await Property.findOne({ status: 'published' });
+  const body = { property: property.id, guestName: 'Token Guest', guestEmail: 'status@example.test', guestPhone: '+256700000001', scheduledAt: new Date(Date.now()+172800000).toISOString() };
+  const created = await request(app).post('/api/v1/bookings').set('Idempotency-Key','status-security-test').send(body);
+  assert.equal(created.status,201);
+  const { _id: id, statusAccessToken: secret } = created.body.data;
+  assert.match(secret,/^[A-Za-z0-9_-]{43}$/);
+  assert.equal(created.body.data.statusTokenHash,undefined);
+  const stored = await Booking.findById(id).select('+statusTokenHash');
+  assert.equal(stored.statusTokenHash,require('crypto').createHash('sha256').update(secret).digest('hex'));
+  const replay = await request(app).post('/api/v1/bookings').set('Idempotency-Key','status-security-test').send(body);
+  assert.equal(replay.status,200); assert.equal(replay.body.data.statusAccessToken,undefined); assert.equal(replay.body.data.guestEmail,undefined);
+  for (const secretValue of [undefined,'wrong','a'.repeat(43)]) {
+    const r=request(app).get(`/api/v1/bookings/${id}/status`);
+    if(secretValue)r.set('X-Viewing-Token',secretValue);
+    assert.equal((await r).status,404);
+  }
+  assert.equal((await request(app).get('/api/v1/bookings/000000000000000000000000/status').set('X-Viewing-Token',secret)).status,404);
+  const other = await request(app).post('/api/v1/bookings').set('Idempotency-Key','other-status-security-test').send({...body,guestEmail:'other-owner@example.test'});
+  assert.equal((await request(app).get(`/api/v1/bookings/${other.body.data._id}/status`).set('X-Viewing-Token',secret)).status,404);
+  await Booking.updateOne({_id:other.body.data._id},{$unset:{statusTokenHash:1}});
+  assert.equal((await request(app).get(`/api/v1/bookings/${other.body.data.reference}/status`).set('X-Viewing-Token',other.body.data.statusAccessToken)).status,404);
+  for(const status of ['pending','confirmed','rejected','cancelled','completed','no_show']) {
+    const admin = await request(app).patch(`/api/v1/admin/bookings/${id}/status`).set('Authorization',`Bearer ${token}`).send({status,adminNotes:'Never public'});
+    assert.equal(admin.status,200);
+    const response=await request(app).get(`/api/v1/bookings/${created.body.data.reference}/status`).set('X-Viewing-Token',secret);
+    assert.equal(response.status,200);assert.equal(response.body.data.status,status);
+    assert.deepEqual(Object.keys(response.body.data).sort(),['reference','scheduledAt','status','updatedAt']);
+    assert.equal(response.headers['cache-control'],'no-store');
+  }
+});
+test("property validation accepts 25 mixed items and rejects excess or video covers", async () => {
+  const {validateProperty}=require('../src/modules/properties/property.validation');
+  const media=Array.from({length:25},(_,i)=>({type:i<20?'image':'video',url:`https://media.example.test/${i}`}));
+  assert.doesNotThrow(()=>validateProperty({media,cover:media[0]},true));
+  assert.throws(()=>validateProperty({media:Array(41).fill(media[0])},true));
+  assert.throws(()=>validateProperty({cover:media[20]},true));
+  assert.throws(()=>validateProperty({media:[{type:'image',url:'javascript:alert(1)'}]},true));
+});
+test('direct upload grants require Admin, expire, bind origin and cannot be replayed',async()=>{
+  const Grant=require('../src/modules/media/upload-grant.model');
+  const origin='http://localhost:3001';
+  assert.equal((await request(app).post('/api/v1/admin/media/tickets').send({origin})).status,401);
+  const issued=await request(app).post('/api/v1/admin/media/tickets').set('Authorization',`Bearer ${token}`).send({origin});
+  assert.equal(issued.status,201);const secret=issued.body.data.token;assert.match(secret,/^[A-Za-z0-9_-]{43}$/);
+  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).attach('files',Buffer.from('test'),{filename:'test.jpg',contentType:'image/jpeg'})).status,401);
+  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin','http://127.0.0.1:3001').set('X-Media-Upload-Token',secret)).status,401);
+  const uploaded=await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',secret).attach('files',Buffer.from('test'),{filename:'test.jpg',contentType:'image/jpeg'});
+  assert.equal(uploaded.status,201);assert.equal(uploaded.body.data.length,1);
+  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',secret)).status,401);
+  const expired=await request(app).post('/api/v1/admin/media/tickets').set('Authorization',`Bearer ${token}`).send({origin});await Grant.updateOne({tokenHash:require('crypto').createHash('sha256').update(expired.body.data.token).digest('hex')},{expiresAt:new Date(0)});
+  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',expired.body.data.token)).status,401);
+});
+
+test('public search requires meaningful terms, ranks titles and composes filters/pagination', async () => {
+  await Property.init();
+  const make = (title, area, type='house', purpose='rent', amount=1000, description='A clearly described listing') => ({title,slug:title.toLowerCase().replace(/[^a-z0-9]+/g,'-'),description,purpose,type,price:{amount,currency:'UGX',period:'month'},location:{country:'Uganda',district:'Wakiso',area},status:'published',publishedAt:new Date()});
+  const inserted = await Property.insertMany([
+    make('Media-rich family home QA — Kira','Kira'),
+    make('Family home in Kira','Kira'),
+    make('Garden apartment in Ntinda','Ntinda','apartment','rent',3000),
+    make('Second apartment Ntinda','Ntinda','apartment','rent',2000),
+    make('Apartment for sale in Ntinda','Ntinda','apartment','sale',4000),
+    make('Apartment in Kira','Kira','apartment'),
+    make('Unrelated showroom','Nansana','commercial','rent',1500,'Media rich family home QA Kira mentioned in descriptive QA text.'),
+  ]);
+  try {
+    const search = async query => {const res=await request(app).get('/api/v1/properties').query(query);assert.equal(res.status,200,JSON.stringify(res.body));return res.body;};
+    const exact=await search({q:'Media-rich family home QA — Kira'});
+    assert.equal(exact.data[0]._id,String(inserted[0]._id)); assert.equal(exact.pagination.total,2);
+    assert.equal((await search({q:'media rich family home QA Kira'})).data[0]._id,String(inserted[0]._id));
+    const kira=await search({q:'Kira'});assert.ok(kira.data.some(p=>p.location.area==='Kira'));assert.ok(kira.data.every(p=>JSON.stringify(p).toLowerCase().includes('kira')));
+    assert.equal((await search({q:'apartments Ntinda'})).pagination.total,3);
+    const apartments=await search({q:'apartment Ntinda',purpose:'rent',type:'apartment'});
+    assert.equal(apartments.pagination.total,2);assert.ok(apartments.data.every(p=>p.location.area==='Ntinda'&&p.type==='apartment'&&p.purpose==='rent'));
+    assert.equal((await search({q:'xyzzyunfindable987'})).pagination.total,0);
+    assert.equal((await search({q:'((.*))'})).pagination.total,0);
+    assert.equal((await search({q:'the and in'})).pagination.total,0);
+    const sorted=await search({q:'apartment Ntinda',sort:'price_asc',limit:1,page:2});
+    assert.equal(sorted.data.length,1);assert.equal(sorted.data[0].price.amount,3000);assert.equal(sorted.pagination.total,3);assert.equal(sorted.pagination.pages,3);
+    assert.equal((await search({q:'apartment in Ntinda',purpose:'sale'})).pagination.total,1);
+  } finally { await Property.deleteMany({_id:{$in:inserted.map(p=>p._id)}}); }
+});
+
+test('uploads enforce file count/type/size/batch limits and roll back a failed batch',async()=>{
+  const fs=require('node:fs/promises'),os=require('node:os');
+  const endpoint=()=>request(app).post('/api/v1/admin/media').set('Authorization',`Bearer ${token}`);
+  assert.equal((await endpoint().attach('files',Buffer.alloc(1),{filename:'bad.txt',contentType:'text/plain'})).status,400);
+  let eleven=endpoint();for(let i=0;i<11;i++)eleven=eleven.attach('files',Buffer.alloc(1),{filename:`${i}.jpg`,contentType:'image/jpeg'});
+  assert.equal((await eleven).status,400);
+  assert.equal((await endpoint().attach('files',Buffer.alloc(10*1024*1024+1),{filename:'large.jpg',contentType:'image/jpeg'})).status,400);
+  assert.equal((await endpoint().attach('files',Buffer.alloc(50*1024*1024+1),{filename:'large.webm',contentType:'video/webm'})).status,413);
+  assert.equal((await endpoint().set('Content-Type','multipart/form-data; boundary=qa').set('Content-Length',String(102*1024*1024)).send('')).status,413);
+  const service=require('../src/modules/media/media.service');const upload=service.upload,remove=service.remove;let calls=0,removed=[];
+  service.upload=async()=>{if(++calls===2)throw Error('Deliberate QA storage failure');return {id:'batch-qa-asset'};};service.remove=async id=>{removed.push(id)};
+  const before=new Set((await fs.readdir(os.tmpdir())).filter(n=>n.startsWith('homes-upload-')));
+  try{const response=await endpoint().attach('files',Buffer.alloc(1),{filename:'a.jpg',contentType:'image/jpeg'}).attach('files',Buffer.alloc(1),{filename:'b.jpg',contentType:'image/jpeg'});assert.equal(response.status,500);assert.deepEqual(removed,['batch-qa-asset']);}
+  finally{service.upload=upload;service.remove=remove;}
+  await new Promise(resolve=>setTimeout(resolve,30));
+  assert.ok((await fs.readdir(os.tmpdir())).filter(n=>n.startsWith('homes-upload-')).every(n=>before.has(n)));
+});
+
+
+test('removing the cover selects the next image and clearing images removes stale cover', async () => {
+  const service = require('../src/modules/properties/property.service');
+  const original = await Property.findOne({status:'published'});
+  const property = await Property.create({title:'Cover deletion QA',slug:'cover-deletion-qa',description:'Disposable local cover regression',purpose:original.purpose,type:original.type,price:original.price,location:original.location});
+  const images = [{type:'image',url:'https://media.example.test/first.jpg',alt:'First'}, {type:'image',url:'https://media.example.test/second.jpg',alt:'Second'}];
+  const video = {type:'video',url:'https://media.example.test/clip.webm'};
+  try {
+    assert.equal((await service.update(property.id,{media:images,cover:images[0]})).cover.url,images[0].url);
+    assert.equal((await service.update(property.id,{media:[video,images[1]]})).cover.url,images[1].url);
+    assert.equal((await service.update(property.id,{media:[video]})).cover,undefined);
+    assert.equal((await service.update(property.id,{media:[]})).media.length,0);
+  } finally { await Property.deleteOne({_id:property.id}); }
+});

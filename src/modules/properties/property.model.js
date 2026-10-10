@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
   type: { type: String, enum: ["apartment", "house", "land", "commercial", "hotel", "guest_house", "serviced_apartment", "other"], required: true, index: true },
   price: { type: priceSchema, required: true }, location: { type: locationSchema, required: true },
   bedrooms: { type: Number, min: 0 }, bathrooms: { type: Number, min: 0 }, size: { type: Number, min: 0 }, sizeUnit: { type: String, enum: ["sqm", "sqft", "acres", "hectares"], default: "sqm" },
-  amenities: [{ type: String, trim: true }], tags: [{ type: String, trim: true }], media: [mediaSchema], cover: mediaSchema,
+  amenities: [{ type: String, trim: true }], tags: [{ type: String, trim: true }], media: { type: [mediaSchema], validate: value => value.length <= 40 }, cover: { type: mediaSchema, validate: value => !value || value.type === "image" },
   agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent", index: true }, agency: { type: mongoose.Schema.Types.ObjectId, ref: "Agency", index: true },
   legacyAgent: { name: String, phone: String, email: String, photo: String, company: String, position: String },
   featured: { type: Boolean, default: false, index: true }, verificationStatus: { type: String, enum: ["unverified", "pending", "verified", "rejected"], default: "unverified", index: true },
