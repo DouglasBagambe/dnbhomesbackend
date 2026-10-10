@@ -1,0 +1,194 @@
+[
+  {
+    "_id": "6ac8c3b2790bd7add6f35a20",
+    "tags": [
+      "preview:uganda-showcase",
+      "preview",
+      "ordinary-rental"
+    ],
+    "slug": "uganda-showcase-self-contained-room-in-kisaasi",
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "bathrooms": 1,
+    "bedrooms": 0,
+    "description": "Locally mirrored licensed showcase record for isolated interaction testing; not a new hosted listing.",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Kampala",
+      "area": "Kisaasi",
+      "address": ""
+    },
+    "price": {
+      "amount": 350000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "size": 20,
+    "sizeUnit": "sqm",
+    "status": "published",
+    "title": "Self-contained room in Kisaasi",
+    "type": "house",
+    "verificationStatus": "unverified",
+    "cover": {
+      "type": "image",
+      "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+      "alt": "Licensed local QA copy"
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+        "alt": "Licensed local QA copy"
+      }
+    ]
+  },
+  {
+    "_id": "6ac8c3b2790bd7add6f35a21",
+    "slug": "uganda-showcase-self-contained-room-in-nansana",
+    "tags": [
+      "preview:uganda-showcase",
+      "preview",
+      "ordinary-rental"
+    ],
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "bathrooms": 1,
+    "bedrooms": 0,
+    "description": "Locally mirrored licensed showcase record for isolated interaction testing; not a new hosted listing.",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Nansana",
+      "address": ""
+    },
+    "price": {
+      "amount": 300000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "size": 18,
+    "sizeUnit": "sqm",
+    "status": "published",
+    "title": "Self-contained room in Nansana",
+    "type": "house",
+    "verificationStatus": "unverified",
+    "cover": {
+      "type": "image",
+      "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+      "alt": "Licensed local QA copy"
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+        "alt": "Licensed local QA copy"
+      }
+    ]
+  },
+  {
+    "_id": "6ac8c3b2790bd7add6f35a22",
+    "slug": "uganda-showcase-self-contained-room-in-bweyogerere",
+    "tags": [
+      "preview:uganda-showcase",
+      "preview",
+      "ordinary-rental"
+    ],
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "bathrooms": 1,
+    "bedrooms": 0,
+    "description": "Locally mirrored licensed showcase record for isolated interaction testing; not a new hosted listing.",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Bweyogerere",
+      "address": ""
+    },
+    "price": {
+      "amount": 400000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "size": 22,
+    "sizeUnit": "sqm",
+    "status": "published",
+    "title": "Self-contained room in Bweyogerere",
+    "type": "house",
+    "verificationStatus": "unverified",
+    "cover": {
+      "type": "image",
+      "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+      "alt": "Licensed local QA copy"
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+        "alt": "Licensed local QA copy"
+      }
+    ]
+  },
+  {
+    "_id": "6ac8c3b2790bd7add6f35a23",
+    "slug": "uganda-showcase-modest-one-bedroom-unit-in-kajjansi",
+    "tags": [
+      "preview:uganda-showcase",
+      "preview",
+      "ordinary-rental"
+    ],
+    "amenities": [
+      "Private washroom",
+      "Prepaid meter",
+      "Shared compound"
+    ],
+    "bathrooms": 1,
+    "bedrooms": 1,
+    "description": "Locally mirrored licensed showcase record for isolated interaction testing; not a new hosted listing.",
+    "location": {
+      "country": "Uganda",
+      "region": "Central",
+      "district": "Wakiso",
+      "area": "Kajjansi",
+      "address": ""
+    },
+    "price": {
+      "amount": 450000,
+      "currency": "UGX",
+      "period": "month"
+    },
+    "purpose": "rent",
+    "size": 35,
+    "sizeUnit": "sqm",
+    "status": "published",
+    "title": "Modest one-bedroom unit in Kajjansi",
+    "type": "house",
+    "verificationStatus": "unverified",
+    "cover": {
+      "type": "image",
+      "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+      "alt": "Licensed local QA copy"
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "http://127.0.0.1:3101/images/1600585154340-be6161a56a0c.jpg",
+        "alt": "Licensed local QA copy"
+      }
+    ]
+  }
+]

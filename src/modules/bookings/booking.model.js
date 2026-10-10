@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const schema = new mongoose.Schema({
+  consumerId: { type: String, index: true },
   statusTokenHash: { type: String, select: false },
   reference: { type: String, required: true, unique: true, index: true }, property: { type: mongoose.Schema.Types.ObjectId, ref: "Property", required: true, index: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true }, guestName: String, guestEmail: { type: String, lowercase: true, trim: true }, guestPhone: String,

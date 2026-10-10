@@ -1,8 +1,8 @@
 const crypto = require("crypto"); const mongoose = require("mongoose"); const Booking = require("./booking.model"); const Property = require("../properties/property.model"); const { badRequest, notFound, AppError } = require("../../utils/errors");
 const statuses = ["pending", "confirmed", "completed", "cancelled", "rejected", "no_show"];
-async function create(body, idempotencyKey) {
+async function create(body, idempotencyKey, consumerId) {
   if (!mongoose.isValidObjectId(body.property)) throw badRequest("Invalid property identifier");
-  if (!body.user && (!body.guestName || !body.guestEmail || !body.guestPhone)) throw badRequest("Guest name, email and phone are required");
+  if (!body.guestName || !body.guestEmail || !body.guestPhone) throw badRequest("Guest name, email and phone are required");
   const scheduledAt = new Date(body.scheduledAt); if (Number.isNaN(scheduledAt.valueOf()) || scheduledAt <= new Date()) throw badRequest("scheduledAt must be a future date");
   const property = await Property.findOne({ _id: body.property, status: "published" }); if (!property) throw notFound("Property not found");
   if (idempotencyKey) { const existing = await Booking.findOne({ idempotencyKey }); if (existing) return { booking: { _id: existing._id, property: existing.property, createdAt: existing.createdAt, ...publicStatus(existing) }, created: false }; }
@@ -11,7 +11,7 @@ async function create(body, idempotencyKey) {
   const reference = `HOM-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
   const statusAccessToken = crypto.randomBytes(32).toString("base64url");
   const statusTokenHash = crypto.createHash("sha256").update(statusAccessToken).digest("hex");
-  const booking = await Booking.create({ statusTokenHash, reference, property: property.id, user: body.user, guestName: body.guestName, guestEmail: body.guestEmail, guestPhone: body.guestPhone, scheduledAt, duration: body.duration, notes: body.notes, agent: property.agent, idempotencyKey });
+  const booking = await Booking.create({ statusTokenHash, reference, property: property.id, consumerId, guestName: body.guestName, guestEmail: body.guestEmail, guestPhone: body.guestPhone, scheduledAt, duration: body.duration, notes: body.notes, agent: property.agent, idempotencyKey });
   const safe = booking.toObject(); delete safe.statusTokenHash;
   return { booking: { ...safe, statusAccessToken }, created: true };
 }
