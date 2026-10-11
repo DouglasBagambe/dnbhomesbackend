@@ -3,7 +3,7 @@ const crypto = require('node:crypto');
 const mongoose = require('mongoose');
 const asyncHandler = require('../../utils/async-handler');
 const { badRequest, notFound, AppError } = require('../../utils/errors');
-const { identity, configured, providerStatus } = require('./auth');
+const { identity, configured, providerStatus, getAuth } = require('./auth');
 const State = require('./state.model');
 const Property = require('../properties/property.model');
 const Booking = require('../bookings/booking.model');
@@ -61,6 +61,12 @@ async function published(values) {
 router.get('/me', asyncHandler(async (req, res) => {
   const { user } = req.consumer;
   res.json({ data: { id: user.id, name: user.name, email: user.email, phone: user.phone || '', emailVerified: user.emailVerified } });
+}));
+router.get('/accounts', asyncHandler(async (req, res) => {
+  const auth = await getAuth();
+  const headers = new Headers({ authorization: req.get('authorization') });
+  const accounts = await auth.api.listUserAccounts({ headers });
+  res.json({ data: accounts.map(item => ({ id: item.id, providerId: item.providerId })) });
 }));
 router.get('/state', asyncHandler(async (req, res) => res.json({ data: await state(req.consumer.user.id) })));
 router.post('/state', asyncHandler(async (req, res) => {
