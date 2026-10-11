@@ -36,3 +36,5 @@ test('staging cannot inherit development auth/database defaults',()=>{
 });
 
 test('hosted auth rejects repetitive low-entropy secrets',()=>{ assert.throws(()=>validateEnvironment({...valid,JWT_ACCESS_SECRET:'a'.repeat(64)})); });
+
+test("production refuses the isolated preview database",()=>{ assert.throws(()=>validateEnvironment({...valid,MONGO_URI:valid.MONGO_URI.replace("homes_production","homes_preview")})); assert.throws(()=>validateEnvironment({...valid,MONGO_URI:valid.MONGO_URI.replace("homes_production","%68omes_preview")})); });

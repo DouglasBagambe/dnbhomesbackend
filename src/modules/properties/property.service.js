@@ -32,7 +32,8 @@ const QA_MEDIA_IMAGE_PATHS = [
   "/images/uganda/hotel-building.jpg",
 ];
 const QA_MEDIA_VIDEO_PATHS = [1,2,3,4,5].map((index) => `/qa/video-${index}.webm`);
-function durableQaMedia(item) {
+function durableQaMedia(item, environment = require("../../config/env").env) {
+  if (environment === "production") return item;
   const plain = item?.toObject ? item.toObject() : item;
   if (!plain || !Array.isArray(plain.tags) || !plain.tags.includes("qa:media-heavy")) return item;
   const hasEphemeralMedia = Array.isArray(plain.media) && plain.media.some((entry) =>
@@ -111,7 +112,7 @@ async function listPublic(query) {
     records = Property.aggregate([{ $match: filter }, { $set: { _searchRelevance: relevance(query) } }, { $sort: searchSort }, { $skip: (page-1)*limit }, { $limit: limit }, { $unset: "_searchRelevance" }]).option({ maxTimeMS: 3000 }).then(data => Property.populate(data, { path: "agent agency" }));
   } else records = Property.find(filter).populate("agent agency").sort(sort).skip((page-1)*limit).limit(limit).maxTimeMS(3000).lean();
   const [data, total] = await Promise.all([records, Property.countDocuments(filter).maxTimeMS(3000)]);
-  return { data: data.map(durableQaMedia), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return { data: data.map(item => durableQaMedia(item)), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
 }
 
 async function getPublic(idOrSlug) {
@@ -127,11 +128,11 @@ async function listAdmin(query) {
   for (const field of ["status", "purpose", "type", "featured", "verificationStatus", "agent", "agency"]) if (query[field] !== undefined && query[field] !== "") filter[field] = query[field];
   if (query.q) filter.$text = { $search: String(query.q).slice(0, 100) };
   const [data, total] = await Promise.all([Property.find(filter).populate("agent agency").sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit), Property.countDocuments(filter)]);
-  return { data: data.map(durableQaMedia), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return { data: data.map(item => durableQaMedia(item)), pagination: { page, limit, total, pages: Math.ceil(total / limit) } };
 }
 
 async function create(body) { validateProperty(body); const data = pick(body); data.slug = await uniqueSlug(data.title); if (data.status === "published") data.publishedAt = new Date(); return Property.create(data); }
 async function update(id, body) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); validateProperty(body, true); const property = await Property.findById(id); if (!property) throw notFound("Property not found"); const data = pick(body); if (body.media !== undefined && body.cover === undefined) data.cover = body.media.find(item => item.type === "image"); if (data.title && data.title !== property.title) data.slug = await uniqueSlug(data.title, id); if (data.status === "published" && property.status !== "published") data.publishedAt = new Date(); if (data.status === "archived") data.archivedAt = new Date(); Object.assign(property, data); return property.save(); }
 async function getAdmin(id) { if (!mongoose.isValidObjectId(id)) throw badRequest("Invalid property identifier"); const item = await Property.findById(id).populate("agent agency"); if (!item) throw notFound("Property not found"); return durableQaMedia(item); }
 
-module.exports = { listPublic, getPublic, listAdmin, getAdmin, create, update };
+module.exports = { durableQaMedia, listPublic, getPublic, listAdmin, getAdmin, create, update };

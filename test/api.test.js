@@ -191,3 +191,9 @@ test('media deletion cannot break a property cover and removes detached local ob
     assert.equal((await service.remove(asset.id)).status,'deleted');
   } finally { await Property.deleteOne({_id:property.id}); await MediaAsset.deleteOne({_id:asset.id}); }
 });
+test('synthetic QA fallback cannot execute in production', () => {
+  const { durableQaMedia } = require('../src/modules/properties/property.service');
+  const qa = { tags:['qa:media-heavy'], media:[{url:'https://dnbhomesbackend.onrender.com/media/old.jpg',type:'image'}] };
+  assert.equal(durableQaMedia(qa,'production'),qa);
+  assert.equal(durableQaMedia(qa,'staging').media.length,25);
+});

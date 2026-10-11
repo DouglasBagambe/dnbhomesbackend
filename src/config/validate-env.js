@@ -50,7 +50,7 @@ function validateEnvironment(values) {
   const hosts = authority.split("@").pop().split(",");
   const database = tail.split("?")[0];
   const query = new URLSearchParams(tail.split("?")[1]);
-  if (!database || /development|demo|(^|[_-])test($|[_-])/i.test(database) || hosts.some((host) => localHost(host.replace(/:\d+$/, ""))) || ["tls", "ssl"].some((key) => query.get(key) === "false") || ["tlsAllowInvalidCertificates", "tlsAllowInvalidHostnames", "tlsInsecure"].some((key) => query.get(key) === "true") || (!mongo.startsWith("mongodb+srv://") && query.get("tls") !== "true" && query.get("ssl") !== "true")) throw new Error("MONGO_URI must select an isolated production database with verified TLS on public database hosts");
+  if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(database) || query.has("dbName") || /development|demo|(^|[_-])test($|[_-])/i.test(database) || (environment === "production" && /preview|(^|[_-])qa($|[_-])/i.test(database)) || hosts.some((host) => localHost(host.replace(/:\d+$/, ""))) || ["tls", "ssl"].some((key) => query.get(key) === "false") || ["tlsAllowInvalidCertificates", "tlsAllowInvalidHostnames", "tlsInsecure"].some((key) => query.get(key) === "true") || (!mongo.startsWith("mongodb+srv://") && query.get("tls") !== "true" && query.get("ssl") !== "true")) throw new Error("MONGO_URI must select an isolated production database with verified TLS on public database hosts");
 }
 function requireDemoDatabase(values) {
   if (values.NODE_ENV !== "development") throw new Error("Demo operations require NODE_ENV=development");
