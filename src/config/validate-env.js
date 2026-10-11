@@ -16,6 +16,7 @@ function validateEnvironment(values) {
   if (values.ACCESS_TOKEN_TTL && !/^\d+[smhd]$/.test(values.ACCESS_TOKEN_TTL)) throw new Error("ACCESS_TOKEN_TTL must be a positive duration such as 15m");
   if (values.TRUST_PROXY && !/^\d+$/.test(values.TRUST_PROXY)) throw new Error("TRUST_PROXY must be the verified number of proxy hops (0 for direct access)");
   if (values.CONSUMER_ACCOUNTS_ENABLED && !['true', 'false'].includes(values.CONSUMER_ACCOUNTS_ENABLED)) throw new Error('Invalid CONSUMER_ACCOUNTS_ENABLED');
+  for (const key of ['CONSUMER_GOOGLE_ENABLED', 'CONSUMER_APPLE_ENABLED']) if (values[key] && !['true', 'false'].includes(values[key])) throw new Error(`Invalid ${key}`);
   if (values.CONSUMER_ACCOUNTS_ENABLED === 'true' && ['staging', 'production'].includes(environment)) {
     const secret = values.CONSUMER_AUTH_SECRET || '';
     if (!strongSecret(secret) || [values.JWT_ACCESS_SECRET, values.JWT_REFRESH_SECRET].includes(secret)) throw new Error('CONSUMER_AUTH_SECRET must be strong and independent');
@@ -28,6 +29,12 @@ function validateEnvironment(values) {
     if (!/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(values.CONSUMER_MAIL_FROM)) throw new Error('CONSUMER_MAIL_FROM must be a verified sender email');
     if (values.SMTP_PORT && !['465', '587'].includes(values.SMTP_PORT)) throw new Error('Hosted SMTP requires TLS port 465 or 587');
     if (values.CONSUMER_MONGO_TRANSACTIONS === 'false') throw new Error('Hosted accounts require MongoDB transactions');
+    if (values.CONSUMER_GOOGLE_ENABLED === 'true') {
+      for (const key of ['GOOGLE_OAUTH_WEB_CLIENT_ID', 'GOOGLE_OAUTH_CLIENT_SECRET']) if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
+    }
+    if (values.CONSUMER_APPLE_ENABLED === 'true') {
+      for (const key of ['APPLE_OAUTH_CLIENT_ID', 'APPLE_OAUTH_CLIENT_SECRET', 'APPLE_OAUTH_IOS_CLIENT_ID']) if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
+    }
   }
   if (!["production", "staging"].includes(environment)) return;
   for (const key of ["MONGO_URI", "JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET", "CORS_ORIGINS", "TRUST_PROXY", "S3_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY_ID", "S3_SECRET_ACCESS_KEY", "S3_PUBLIC_URL"]) {
