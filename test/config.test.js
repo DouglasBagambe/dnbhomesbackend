@@ -24,3 +24,12 @@ test('forwarded consumer IP requires a fresh path-bound authenticated signature'
  assert.equal(clientIp(req,now),ip);assert.equal(clientIp(req,now+31000),req.ip);assert.equal(clientIp({...req,method:'GET'},now),req.ip);assert.equal(clientIp({...req,originalUrl:path+'-forged'},now),req.ip);
  h['x-homes-web-signature']='a'.repeat(64);assert.equal(clientIp(req,now),req.ip);if(before===undefined)delete process.env.CONSUMER_WEB_PROXY_SECRET;else process.env.CONSUMER_WEB_PROXY_SECRET=before;
 });
+
+test('hosted Resend delivery requires credentials and a sender',()=>{
+ const values={...valid,CONSUMER_ACCOUNTS_ENABLED:'true',CONSUMER_AUTH_SECRET:'c'.repeat(64),CONSUMER_WEB_PROXY_SECRET:'d'.repeat(64),CONSUMER_AUTH_URL:'https://api.homes-fixture.co.ug',CONSUMER_MAIL_DRIVER:'resend',RESEND_API_KEY:'isolated-provider-fixture',CONSUMER_MAIL_FROM:'accounts@homes-fixture.co.ug'};
+ assert.doesNotThrow(()=>validateEnvironment(values));assert.throws(()=>validateEnvironment({...values,RESEND_API_KEY:''}));
+});
+test('staging cannot inherit development auth/database defaults',()=>{
+ assert.throws(()=>validateEnvironment({NODE_ENV:'staging'}), /MONGO_URI/);
+ assert.doesNotThrow(()=>validateEnvironment({...valid,NODE_ENV:'staging',MEDIA_DRIVER:'local'}));
+});

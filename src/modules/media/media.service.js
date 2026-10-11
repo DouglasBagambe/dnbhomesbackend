@@ -1,7 +1,31 @@
-const crypto = require("crypto"); const fs = require("fs/promises"); const path = require("path"); const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3"); const env = require("../../config/env"); const MediaAsset = require("./media-asset.model"); const { AppError } = require("../../utils/errors");
-const extensions = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/avif": ".avif", "video/mp4": ".mp4", "video/webm": ".webm" };
-const keyFor = (file) => `${file.mimetype.startsWith("image/") ? "images" : "videos"}/${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}${extensions[file.mimetype]}`;
-function s3Client() { const values = env.s3; if (!values.endpoint || !values.bucket || !values.accessKeyId || !values.secretAccessKey || !values.publicUrl) throw new Error("S3/R2 media configuration is incomplete"); return new S3Client({ endpoint: values.endpoint, region: values.region, credentials: { accessKeyId: values.accessKeyId, secretAccessKey: values.secretAccessKey }, forcePathStyle: true }); }
-async function upload(file, actor) { const key = keyFor(file); let url; if (env.mediaDriver === "s3") { await s3Client().send(new PutObjectCommand({ Bucket: env.s3.bucket, Key: key, Body: file.buffer, ContentType: file.mimetype, CacheControl: "public, max-age=31536000, immutable" })); url = `${env.s3.publicUrl.replace(/\/$/, "")}/${key}`; } else { const target = path.join(env.mediaLocalPath, key); await fs.mkdir(path.dirname(target), { recursive: true }); await fs.writeFile(target, file.buffer); url = `${env.mediaPublicUrl.replace(/\/$/, "")}/${key}`; } return MediaAsset.create({ key, url, originalName: file.originalname, type: file.mimetype.startsWith("image/") ? "image" : "video", mimeType: file.mimetype, size: file.size, uploadedBy: actor }); }
-async function remove(id) { const asset = await MediaAsset.findById(id); if (!asset) throw new AppError(404, "NOT_FOUND", "Media asset not found"); if (env.mediaDriver === "s3") await s3Client().send(new DeleteObjectCommand({ Bucket: env.s3.bucket, Key: asset.key })); else { const target = path.resolve(env.mediaLocalPath, asset.key); if (!target.startsWith(env.mediaLocalPath)) throw new AppError(400, "INVALID_PATH", "Invalid media path"); await fs.unlink(target).catch((error) => { if (error.code !== "ENOENT") throw error; }); } asset.status = "deleted"; await asset.save(); return asset; }
+const crypto = require('node:crypto');
+const env = require('../../config/env');
+const MediaAsset = require('./media-asset.model');
+const { AppError } = require('../../utils/errors');
+const { createStorage, validateMedia } = require('./storage');
+const extensions = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'image/avif': '.avif', 'video/mp4': '.mp4', 'video/webm': '.webm' };
+async function upload(file, actor) {
+  validateMedia(file);
+  const key = `${file.mimetype.startsWith('image/') ? 'images' : 'videos'}/${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}${extensions[file.mimetype]}`;
+  const storage = createStorage(env);
+  const url = await storage.put(key, file.buffer, file.mimetype);
+  try { return await MediaAsset.create({ key, url, storageDriver: env.mediaDriver, storageBucket: env.mediaDriver === 's3' ? env.s3.bucket : undefined, originalName: file.originalname, type: file.mimetype.startsWith('image/') ? 'image' : 'video', mimeType: file.mimetype, size: file.size, uploadedBy: actor }); }
+  catch (error) { await storage.remove(key); throw error; }
+}
+async function remove(id) {
+  const asset = await MediaAsset.findById(id);
+  if (!asset) throw new AppError(404, 'NOT_FOUND', 'Media asset not found');
+  if (asset.status === 'deleted') return asset;
+  // Removing a library asset in use would break live listing media/cover. Detach it first.
+  const Property = require('../properties/property.model');
+  if (await Property.exists({ $or: [{ 'media.key': asset.key }, { 'media.url': asset.url }, { 'cover.key': asset.key }, { 'cover.url': asset.url }] })) throw new AppError(409, 'MEDIA_IN_USE', 'Remove this media from its properties before deleting it');
+  if (asset.storageBucket && asset.storageBucket !== env.s3.bucket) throw new AppError(409, 'STORAGE_MISMATCH', 'This media belongs to a different storage bucket');
+  // Legacy records infer from URL only; never turn a former local object into an S3 delete.
+  const driver = asset.storageDriver || (asset.url.startsWith(`${env.mediaPublicUrl.replace(/\/$/, '')}/`) ? 'local' : env.mediaDriver);
+  if (driver !== env.mediaDriver) throw new AppError(409, 'STORAGE_MISMATCH', 'This media belongs to a different storage provider');
+  await createStorage(env).remove(asset.key);
+  asset.status = 'deleted';
+  await asset.save();
+  return asset;
+}
 module.exports = { upload, remove };

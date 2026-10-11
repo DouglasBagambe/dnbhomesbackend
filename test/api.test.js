@@ -107,9 +107,9 @@ test('direct upload grants require Admin, expire, bind origin and cannot be repl
   assert.equal((await request(app).post('/api/v1/admin/media/tickets').send({origin})).status,401);
   const issued=await request(app).post('/api/v1/admin/media/tickets').set('Authorization',`Bearer ${token}`).send({origin});
   assert.equal(issued.status,201);const secret=issued.body.data.token;assert.match(secret,/^[A-Za-z0-9_-]{43}$/);
-  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).attach('files',Buffer.from('test'),{filename:'test.jpg',contentType:'image/jpeg'})).status,401);
+  assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).attach('files',Buffer.from([255,216,255,217]),{filename:'test.jpg',contentType:'image/jpeg'})).status,401);
   assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin','http://127.0.0.1:3001').set('X-Media-Upload-Token',secret)).status,401);
-  const uploaded=await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',secret).attach('files',Buffer.from('test'),{filename:'test.jpg',contentType:'image/jpeg'});
+  const uploaded=await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',secret).attach('files',Buffer.from([255,216,255,217]),{filename:'test.jpg',contentType:'image/jpeg'});
   assert.equal(uploaded.status,201);assert.equal(uploaded.body.data.length,1);
   assert.equal((await request(app).post('/api/v1/media/uploads').set('Origin',origin).set('X-Media-Upload-Token',secret)).status,401);
   const expired=await request(app).post('/api/v1/admin/media/tickets').set('Authorization',`Bearer ${token}`).send({origin});await Grant.updateOne({tokenHash:require('crypto').createHash('sha256').update(expired.body.data.token).digest('hex')},{expiresAt:new Date(0)});
@@ -177,4 +177,17 @@ test('removing the cover selects the next image and clearing images removes stal
     assert.equal((await service.update(property.id,{media:[video]})).cover,undefined);
     assert.equal((await service.update(property.id,{media:[]})).media.length,0);
   } finally { await Property.deleteOne({_id:property.id}); }
+});
+test('media deletion cannot break a property cover and removes detached local objects', async () => {
+  const service = require('../src/modules/media/media.service');
+  const Property = require('../src/modules/properties/property.model');
+  const MediaAsset = require('../src/modules/media/media-asset.model');
+  const asset = await service.upload({buffer:Buffer.from([255,216,255,217]),size:4,mimetype:'image/jpeg',originalname:'isolated-test.jpg'});
+  const property = await Property.create({title:'Media ownership fixture',slug:'media-ownership-fixture',description:'Isolated regression fixture',purpose:'rent',type:'house',price:{amount:1},location:{area:'Kira'},media:[{key:asset.key,url:asset.url,type:'image'}],cover:{key:asset.key,url:asset.url,type:'image'}});
+  try {
+    await assert.rejects(service.remove(asset.id), error => error.code === 'MEDIA_IN_USE');
+    await Property.updateOne({_id:property.id},{$set:{media:[]},$unset:{cover:1}});
+    assert.equal((await service.remove(asset.id)).status,'deleted');
+    assert.equal((await service.remove(asset.id)).status,'deleted');
+  } finally { await Property.deleteOne({_id:property.id}); await MediaAsset.deleteOne({_id:asset.id}); }
 });

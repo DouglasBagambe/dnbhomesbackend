@@ -21,22 +21,24 @@ function validateEnvironment(values) {
     const proxySecret = values.CONSUMER_WEB_PROXY_SECRET || '';
     if (proxySecret.length < 32 || /replace|development|example|placeholder/i.test(proxySecret) || [secret,values.JWT_ACCESS_SECRET,values.JWT_REFRESH_SECRET].includes(proxySecret)) throw new Error('CONSUMER_WEB_PROXY_SECRET must be strong and independent');
     publicHttps(values.CONSUMER_AUTH_URL, 'CONSUMER_AUTH_URL', true);
-    if (values.CONSUMER_MAIL_DRIVER !== 'smtp') throw new Error('Hosted consumer accounts require authenticated SMTP delivery');
-    for (const key of ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD', 'CONSUMER_MAIL_FROM']) if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
+    if (!['smtp', 'resend'].includes(values.CONSUMER_MAIL_DRIVER)) throw new Error('Hosted consumer accounts require authenticated SMTP or Resend delivery');
+    const mailKeys = values.CONSUMER_MAIL_DRIVER === 'resend' ? ['RESEND_API_KEY', 'CONSUMER_MAIL_FROM'] : ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD', 'CONSUMER_MAIL_FROM'];
+    for (const key of mailKeys) if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
     if (!/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(values.CONSUMER_MAIL_FROM)) throw new Error('CONSUMER_MAIL_FROM must be a verified sender email');
     if (values.SMTP_PORT && !['465', '587'].includes(values.SMTP_PORT)) throw new Error('Hosted SMTP requires TLS port 465 or 587');
     if (values.CONSUMER_MONGO_TRANSACTIONS === 'false') throw new Error('Hosted accounts require MongoDB transactions');
   }
-  if (environment !== "production") return;
+  if (!["production", "staging"].includes(environment)) return;
   for (const key of ["MONGO_URI", "JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET", "CORS_ORIGINS", "TRUST_PROXY", "S3_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY_ID", "S3_SECRET_ACCESS_KEY", "S3_PUBLIC_URL"]) {
+    if (key.startsWith("S3_") && environment === "staging" && values.MEDIA_DRIVER !== "s3") continue;
     if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
   }
   for (const key of ["JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET"]) {
     if (values[key].length < 32 || /replace|change.before|development|example|placeholder/i.test(values[key])) throw new Error(`${key} must be a strong production secret`);
   }
   if (values.JWT_ACCESS_SECRET === values.JWT_REFRESH_SECRET) throw new Error("JWT secrets must be independent");
-  if (values.MEDIA_DRIVER !== "s3") throw new Error("Production requires MEDIA_DRIVER=s3");
-  publicHttps(values.S3_ENDPOINT, "S3_ENDPOINT"); publicHttps(values.S3_PUBLIC_URL, "S3_PUBLIC_URL");
+  if (environment === "production" && values.MEDIA_DRIVER !== "s3") throw new Error("Production requires MEDIA_DRIVER=s3");
+  if (values.MEDIA_DRIVER === "s3") { publicHttps(values.S3_ENDPOINT, "S3_ENDPOINT"); publicHttps(values.S3_PUBLIC_URL, "S3_PUBLIC_URL"); }
   const origins = values.CORS_ORIGINS.split(",").map((value) => value.trim()).filter(Boolean);
   if (!origins.length) throw new Error("CORS_ORIGINS must contain explicit origins");
   origins.forEach((origin) => publicHttps(origin, "CORS_ORIGINS", true));
