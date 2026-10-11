@@ -12,6 +12,32 @@ async function getAuth() {
 }
 
 function configured() { return process.env.CONSUMER_ACCOUNTS_ENABLED === 'true'; }
+const list = value => String(value || '').split(',').map(item => item.trim()).filter(Boolean);
+function socialProviders(values = process.env) {
+  const providers = {};
+  if (values.CONSUMER_GOOGLE_ENABLED === 'true') {
+    const ids = [...new Set([values.GOOGLE_OAUTH_WEB_CLIENT_ID, values.GOOGLE_OAUTH_ANDROID_CLIENT_ID, values.GOOGLE_OAUTH_IOS_CLIENT_ID].filter(Boolean))];
+    if (ids.length && values.GOOGLE_OAUTH_CLIENT_SECRET) providers.google = {
+      clientId: ids.length === 1 ? ids[0] : ids,
+      clientSecret: values.GOOGLE_OAUTH_CLIENT_SECRET,
+      scope: ['openid', 'email', 'profile'],
+      requireEmailVerification: true,
+    };
+  }
+  if (values.CONSUMER_APPLE_ENABLED === 'true') {
+    const ids = [...new Set([values.APPLE_OAUTH_CLIENT_ID, values.APPLE_OAUTH_IOS_CLIENT_ID].filter(Boolean))];
+    if (ids.length && values.APPLE_OAUTH_CLIENT_SECRET) providers.apple = {
+      clientId: ids.length === 1 ? ids[0] : ids,
+      clientSecret: values.APPLE_OAUTH_CLIENT_SECRET,
+      scope: ['name', 'email'],
+    };
+  }
+  return providers;
+}
+function providerStatus(values = process.env) {
+  const providers = socialProviders(values);
+  return { google: Boolean(providers.google), apple: Boolean(providers.apple) };
+}
 async function createAuth() {
   if (!configured()) throw new AppError(503, 'ACCOUNTS_UNAVAILABLE', 'Accounts are being prepared. You can continue as a guest.');
   if (!mongoose.connection.db) throw new AppError(503, 'ACCOUNTS_UNAVAILABLE', 'Accounts are temporarily unavailable.');
@@ -31,7 +57,18 @@ async function createAuth() {
       await require('./state.model').deleteOne({ consumerId: user.id });
       await require('../bookings/booking.model').updateMany({ consumerId: user.id }, { $unset: { consumerId: 1, statusTokenHash: 1, notes: 1 }, $set: { guestName: 'Deleted account', guestEmail: '', guestPhone: '' } });
     } } },
-    account: { modelName: 'consumerCredential' }, verification: { modelName: 'consumerVerification' },
+    account: {
+      modelName: 'consumerCredential',
+      accountLinking: {
+        enabled: true,
+        disableImplicitLinking: true,
+        trustedProviders: ['google', 'apple'],
+        allowDifferentEmails: false,
+        allowUnlinkingAll: false,
+      },
+    },
+    socialProviders: socialProviders(),
+    verification: { modelName: 'consumerVerification' },
     session: { modelName: 'consumerSession', expiresIn: 7 * 86400, updateAge: 86400, freshAge: 300, cookieCache: { enabled: false } },
     emailAndPassword: { enabled: true, minPasswordLength: 12, maxPasswordLength: 128, requireEmailVerification: true, revokeSessionsOnPasswordReset: true },
     emailVerification: { sendOnSignUp: true, autoSignInAfterVerification: true },
@@ -84,4 +121,4 @@ async function handler(req, res, next) {
     return setResponse(res, await auth.handler(getRequest({ request: req, base: new URL(process.env.CONSUMER_AUTH_URL).origin, bodySizeLimit: 40000 })));
   } catch (error) { next(error); }
 }
-module.exports = { getAuth, identity, handler, configured };
+module.exports = { getAuth, identity, handler, configured, providerStatus, socialProviders };
