@@ -33,6 +33,15 @@ test.before(async () => {
   property = await Property.create({ title: 'Account QA home', slug: 'account-qa-home', description: 'Local isolated account and viewing tests', purpose: 'rent', type: 'house', price: { amount: 1500000, currency: 'UGX', period: 'month' }, location: { country: 'Uganda', district: 'Wakiso', area: 'Kira' }, status: 'published' });
 });
 test.after(async () => { await disconnectDatabase(); await mongo?.stop(); await fs.rm(folder, { recursive: true, force: true }); });
+test('account capabilities are public and distinguish providers from connectivity', async () => {
+  const result = await request(app).get('/api/v1/consumer/capabilities');
+  assert.equal(result.status, 200);
+  assert.equal(result.body.data.accounts, true);
+  assert.deepEqual(result.body.data.providers, { google: false, apple: false });
+  assert.equal(result.body.data.sync.saved, true);
+  assert.equal(result.body.data.sync.compare, true);
+  assert.equal(result.body.data.sync.viewings, true);
+});
 test('registration requires ownership, OTP is hashed and single use, signed session is issued', async () => {
   assert.equal((await send('sign-up/email', { name: 'QA', email, password: 'weak' })).status, 400);
   const signup = await send('sign-up/email', { name: 'QA consumer', email, password, phone: '+256700000000' });
