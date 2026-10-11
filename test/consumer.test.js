@@ -42,6 +42,20 @@ test('account capabilities are public and distinguish providers from connectivit
   assert.equal(result.body.data.sync.compare, true);
   assert.equal(result.body.data.sync.viewings, true);
 });
+test('Apple Android callback only redirects to fixed Homes packages', async () => {
+  const staging = await request(app)
+    .post('/api/v1/consumer/apple/callback/staging')
+    .type('form')
+    .send({ code: 'apple-code', state: 'opaque-state', redirect: 'https://attacker.invalid' });
+  assert.equal(staging.status, 302);
+  assert.match(staging.headers.location, /^intent:\/\/callback\?/);
+  assert.match(staging.headers.location, /package=com\.nilebitlabs\.dnbhomes\.staging/);
+  assert.doesNotMatch(staging.headers.location, /attacker/);
+  assert.equal((await request(app)
+    .post('/api/v1/consumer/apple/callback/unknown')
+    .type('form')
+    .send({ code: 'x' })).status, 404);
+});
 test('registration requires ownership, OTP is hashed and single use, signed session is issued', async () => {
   assert.equal((await send('sign-up/email', { name: 'QA', email, password: 'weak' })).status, 400);
   const signup = await send('sign-up/email', { name: 'QA consumer', email, password, phone: '+256700000000' });
