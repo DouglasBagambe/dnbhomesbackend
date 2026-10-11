@@ -30,6 +30,12 @@ function socialProviders(values = process.env) {
       clientId: ids.length === 1 ? ids[0] : ids,
       clientSecret: values.APPLE_OAUTH_CLIENT_SECRET,
       scope: ['name', 'email'],
+      mapProfileToUser: profile => ({
+        // Apple only includes email on initial consent. Returning accounts are
+        // anchored by Apple's stable subject; the placeholder is never used as
+        // a contact address and existing user email is not overwritten.
+        email: profile.email || `${profile.sub}@apple.placeholder.invalid`,
+      }),
     };
   }
   return providers;
