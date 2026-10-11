@@ -6,6 +6,7 @@ function publicHttps(value, key, originOnly = false) {
   if (url.protocol !== "https:" || localHost(url.hostname) || url.username || url.password || url.search || url.hash || (originOnly && url.pathname !== "/")) throw new Error(`${key} must be a public HTTPS ${originOnly ? "origin" : "URL"}`);
   return url;
 }
+const strongSecret = value => typeof value === "string" && value.length >= 32 && new Set(value).size >= 8 && !/replace|change.before|development|example|placeholder/i.test(value);
 function validateEnvironment(values) {
   const environment = values.NODE_ENV || "development";
   if (!["development", "test", "staging", "production"].includes(environment)) throw new Error("Invalid NODE_ENV");
@@ -17,9 +18,9 @@ function validateEnvironment(values) {
   if (values.CONSUMER_ACCOUNTS_ENABLED && !['true', 'false'].includes(values.CONSUMER_ACCOUNTS_ENABLED)) throw new Error('Invalid CONSUMER_ACCOUNTS_ENABLED');
   if (values.CONSUMER_ACCOUNTS_ENABLED === 'true' && ['staging', 'production'].includes(environment)) {
     const secret = values.CONSUMER_AUTH_SECRET || '';
-    if (secret.length < 32 || /replace|development|example|placeholder/i.test(secret) || [values.JWT_ACCESS_SECRET, values.JWT_REFRESH_SECRET].includes(secret)) throw new Error('CONSUMER_AUTH_SECRET must be strong and independent');
+    if (!strongSecret(secret) || [values.JWT_ACCESS_SECRET, values.JWT_REFRESH_SECRET].includes(secret)) throw new Error('CONSUMER_AUTH_SECRET must be strong and independent');
     const proxySecret = values.CONSUMER_WEB_PROXY_SECRET || '';
-    if (proxySecret.length < 32 || /replace|development|example|placeholder/i.test(proxySecret) || [secret,values.JWT_ACCESS_SECRET,values.JWT_REFRESH_SECRET].includes(proxySecret)) throw new Error('CONSUMER_WEB_PROXY_SECRET must be strong and independent');
+    if (!strongSecret(proxySecret) || [secret,values.JWT_ACCESS_SECRET,values.JWT_REFRESH_SECRET].includes(proxySecret)) throw new Error('CONSUMER_WEB_PROXY_SECRET must be strong and independent');
     publicHttps(values.CONSUMER_AUTH_URL, 'CONSUMER_AUTH_URL', true);
     if (!['smtp', 'resend'].includes(values.CONSUMER_MAIL_DRIVER)) throw new Error('Hosted consumer accounts require authenticated SMTP or Resend delivery');
     const mailKeys = values.CONSUMER_MAIL_DRIVER === 'resend' ? ['RESEND_API_KEY', 'CONSUMER_MAIL_FROM'] : ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD', 'CONSUMER_MAIL_FROM'];
@@ -34,7 +35,7 @@ function validateEnvironment(values) {
     if (!values[key]?.trim()) throw new Error(`Missing required environment variable: ${key}`);
   }
   for (const key of ["JWT_ACCESS_SECRET", "JWT_REFRESH_SECRET"]) {
-    if (values[key].length < 32 || /replace|change.before|development|example|placeholder/i.test(values[key])) throw new Error(`${key} must be a strong production secret`);
+    if (!strongSecret(values[key])) throw new Error(`${key} must be a strong production secret`);
   }
   if (values.JWT_ACCESS_SECRET === values.JWT_REFRESH_SECRET) throw new Error("JWT secrets must be independent");
   if (environment === "production" && values.MEDIA_DRIVER !== "s3") throw new Error("Production requires MEDIA_DRIVER=s3");

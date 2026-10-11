@@ -1,7 +1,8 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { validateEnvironment, requireDemoDatabase } = require("../src/config/validate-env");
-const valid = { NODE_ENV: "production", MONGO_URI: "mongodb+srv://user:password@cluster.homes-fixture.co.ug/homes_production", JWT_ACCESS_SECRET: "a".repeat(64), JWT_REFRESH_SECRET: "b".repeat(64), CORS_ORIGINS: "https://homes-fixture.co.ug", TRUST_PROXY: "1", MEDIA_DRIVER: "s3", S3_ENDPOINT: "https://objects.homes-fixture.co.ug", S3_REGION: "auto", S3_BUCKET: "homes-fixture", S3_ACCESS_KEY_ID: "test-only", S3_SECRET_ACCESS_KEY: "test-only", S3_PUBLIC_URL: "https://media.homes-fixture.co.ug" };
+const fixtureSecret = label => require("node:crypto").createHash("sha256").update(`isolated-configuration-fixture-${label}`).digest("hex");
+const valid = { NODE_ENV: "production", MONGO_URI: "mongodb+srv://user:password@cluster.homes-fixture.co.ug/homes_production", JWT_ACCESS_SECRET: fixtureSecret("access"), JWT_REFRESH_SECRET: fixtureSecret("refresh"), CORS_ORIGINS: "https://homes-fixture.co.ug", TRUST_PROXY: "1", MEDIA_DRIVER: "s3", S3_ENDPOINT: "https://objects.homes-fixture.co.ug", S3_REGION: "auto", S3_BUCKET: "homes-fixture", S3_ACCESS_KEY_ID: "test-only", S3_SECRET_ACCESS_KEY: "test-only", S3_PUBLIC_URL: "https://media.homes-fixture.co.ug" };
 test("production requires safe complete configuration before connecting", () => {
   assert.doesNotThrow(() => validateEnvironment(valid));
   for (const key of Object.keys(valid).filter((key) => key !== "NODE_ENV")) assert.throws(() => validateEnvironment({ ...valid, [key]: "" }), key);
@@ -13,7 +14,7 @@ test("demo seed and cleanup only permit the local development database", () => {
 });
 
 test('hosted consumer accounts require independent secrets, TLS mail and transactions',()=>{
- const consumer={...valid,CONSUMER_ACCOUNTS_ENABLED:'true',CONSUMER_AUTH_SECRET:'c'.repeat(64),CONSUMER_WEB_PROXY_SECRET:'d'.repeat(64),CONSUMER_AUTH_URL:'https://api.homes-fixture.co.ug',CONSUMER_MAIL_DRIVER:'smtp',SMTP_HOST:'smtp.homes-fixture.co.ug',SMTP_USER:'isolated-configuration-fixture',SMTP_PASSWORD:'isolated-configuration-fixture',CONSUMER_MAIL_FROM:'accounts@homes-fixture.co.ug'};
+ const consumer={...valid,CONSUMER_ACCOUNTS_ENABLED:'true',CONSUMER_AUTH_SECRET:fixtureSecret('consumer'),CONSUMER_WEB_PROXY_SECRET:fixtureSecret('proxy'),CONSUMER_AUTH_URL:'https://api.homes-fixture.co.ug',CONSUMER_MAIL_DRIVER:'smtp',SMTP_HOST:'smtp.homes-fixture.co.ug',SMTP_USER:'isolated-configuration-fixture',SMTP_PASSWORD:'isolated-configuration-fixture',CONSUMER_MAIL_FROM:'accounts@homes-fixture.co.ug'};
  assert.doesNotThrow(()=>validateEnvironment(consumer));
  for(const patch of [{CONSUMER_AUTH_SECRET:valid.JWT_ACCESS_SECRET},{CONSUMER_WEB_PROXY_SECRET:consumer.CONSUMER_AUTH_SECRET},{CONSUMER_WEB_PROXY_SECRET:''},{CONSUMER_AUTH_URL:'http://localhost:3100'},{CONSUMER_MAIL_DRIVER:'local'},{SMTP_PASSWORD:''},{SMTP_PORT:'25'},{CONSUMER_MONGO_TRANSACTIONS:'false'}]) assert.throws(()=>validateEnvironment({...consumer,...patch}));
 });
@@ -26,10 +27,12 @@ test('forwarded consumer IP requires a fresh path-bound authenticated signature'
 });
 
 test('hosted Resend delivery requires credentials and a sender',()=>{
- const values={...valid,CONSUMER_ACCOUNTS_ENABLED:'true',CONSUMER_AUTH_SECRET:'c'.repeat(64),CONSUMER_WEB_PROXY_SECRET:'d'.repeat(64),CONSUMER_AUTH_URL:'https://api.homes-fixture.co.ug',CONSUMER_MAIL_DRIVER:'resend',RESEND_API_KEY:'isolated-provider-fixture',CONSUMER_MAIL_FROM:'accounts@homes-fixture.co.ug'};
+ const values={...valid,CONSUMER_ACCOUNTS_ENABLED:'true',CONSUMER_AUTH_SECRET:fixtureSecret('consumer'),CONSUMER_WEB_PROXY_SECRET:fixtureSecret('proxy'),CONSUMER_AUTH_URL:'https://api.homes-fixture.co.ug',CONSUMER_MAIL_DRIVER:'resend',RESEND_API_KEY:'isolated-provider-fixture',CONSUMER_MAIL_FROM:'accounts@homes-fixture.co.ug'};
  assert.doesNotThrow(()=>validateEnvironment(values));assert.throws(()=>validateEnvironment({...values,RESEND_API_KEY:''}));
 });
 test('staging cannot inherit development auth/database defaults',()=>{
  assert.throws(()=>validateEnvironment({NODE_ENV:'staging'}), /MONGO_URI/);
  assert.doesNotThrow(()=>validateEnvironment({...valid,NODE_ENV:'staging',MEDIA_DRIVER:'local'}));
 });
+
+test('hosted auth rejects repetitive low-entropy secrets',()=>{ assert.throws(()=>validateEnvironment({...valid,JWT_ACCESS_SECRET:'a'.repeat(64)})); });
