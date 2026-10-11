@@ -3,10 +3,22 @@ const crypto = require('node:crypto');
 const mongoose = require('mongoose');
 const asyncHandler = require('../../utils/async-handler');
 const { badRequest, notFound, AppError } = require('../../utils/errors');
-const { identity } = require('./auth');
+const { identity, configured, providerStatus } = require('./auth');
 const State = require('./state.model');
 const Property = require('../properties/property.model');
 const Booking = require('../bookings/booking.model');
+
+router.get('/capabilities', (req, res) => {
+  const enabled = configured();
+  res.set('Cache-Control', 'no-store');
+  res.json({
+    data: {
+      accounts: enabled,
+      providers: enabled ? providerStatus() : { google: false, apple: false },
+      sync: enabled ? { saved: true, compare: true, recent: true, viewings: true, profile: true } : { saved: false, compare: false, recent: false, viewings: false, profile: false },
+    },
+  });
+});
 
 router.use(asyncHandler(async (req, res, next) => {
   req.consumer = await identity(req); res.set('Cache-Control', 'no-store'); next();
