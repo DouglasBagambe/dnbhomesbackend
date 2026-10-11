@@ -20,6 +20,28 @@ router.get('/capabilities', (req, res) => {
   });
 });
 
+// Sign in with Apple on Android returns through a public HTTPS endpoint, then
+// hands the provider response back to the fixed app package. The package is
+// selected only from this allowlist; no client-controlled redirect is accepted.
+router.post('/apple/callback/:flavor', (req, res) => {
+  const packages = {
+    staging: 'com.nilebitlabs.dnbhomes.staging',
+    production: 'com.nilebitlabs.dnbhomes',
+  };
+  const packageName = packages[req.params.flavor];
+  if (!packageName) return res.status(404).send('Not found');
+  const allowed = ['code', 'id_token', 'state', 'user', 'error'];
+  const query = new URLSearchParams();
+  for (const key of allowed) {
+    if (typeof req.body?.[key] === 'string' && req.body[key].length <= 12000) {
+      query.set(key, req.body[key]);
+    }
+  }
+  if (!query.size) return res.status(400).send('Invalid Apple callback');
+  res.set('Cache-Control', 'no-store');
+  return res.redirect(302, `intent://callback?${query.toString()}#Intent;package=${packageName};scheme=signinwithapple;end`);
+});
+
 router.use(asyncHandler(async (req, res, next) => {
   req.consumer = await identity(req); res.set('Cache-Control', 'no-store'); next();
 }));
