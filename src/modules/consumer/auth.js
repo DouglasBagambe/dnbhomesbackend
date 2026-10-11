@@ -51,7 +51,10 @@ async function createAuth() {
   cached = betterAuth({
     appName: 'Homes', secret, baseURL, basePath: '/api/v1/auth/consumer',
     database: mongodbAdapter(database, { client: mongoose.connection.getClient(), transaction: process.env.NODE_ENV !== 'test' && process.env.CONSUMER_MONGO_TRANSACTIONS !== 'false' }),
-    trustedOrigins: (process.env.CORS_ORIGINS || '').split(',').map(v => v.trim()).filter(Boolean),
+    trustedOrigins: [
+      ...(process.env.CORS_ORIGINS || '').split(',').map(v => v.trim()).filter(Boolean),
+      ...(process.env.CONSUMER_APPLE_ENABLED === 'true' ? ['https://appleid.apple.com'] : []),
+    ],
     user: { modelName: 'consumerIdentity', additionalFields: { phone: { type: 'string', required: false, defaultValue: '' } }, deleteUser: { enabled: true, beforeDelete: async user => {
       // Retain the broker's operational viewing record, sever identity and erase consumer PII.
       await require('./state.model').deleteOne({ consumerId: user.id });
