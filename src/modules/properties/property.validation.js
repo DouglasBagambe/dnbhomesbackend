@@ -27,6 +27,8 @@ function validateProperty(body, partial = false) {
   if (body.purpose && !purposes.includes(body.purpose))
     errors.push("purpose is invalid");
   if (body.type && !types.includes(body.type)) errors.push("type is invalid");
+  if (body.availabilityStatus !== undefined && !require("./availability").values.includes(body.availabilityStatus))
+    errors.push("availabilityStatus is invalid");
   if (body.status && !statuses.includes(body.status))
     errors.push("status is invalid");
   if (

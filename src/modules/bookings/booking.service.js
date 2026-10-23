@@ -4,8 +4,9 @@ async function create(body, idempotencyKey, consumerId) {
   if (!mongoose.isValidObjectId(body.property)) throw badRequest("Invalid property identifier");
   if (!body.guestName || !body.guestEmail || !body.guestPhone) throw badRequest("Guest name, email and phone are required");
   const scheduledAt = new Date(body.scheduledAt); if (Number.isNaN(scheduledAt.valueOf()) || scheduledAt <= new Date()) throw badRequest("scheduledAt must be a future date");
-  const property = await Property.findOne({ _id: body.property, status: "published" }); if (!property) throw notFound("Property not found");
+  const property = await Property.findOne({ _id: body.property, status: "published", ...require("../properties/availability").publicVisibility() }); if (!property) throw notFound("Property not found");
   if (idempotencyKey) { const existing = await Booking.findOne({ idempotencyKey }); if (existing) return { booking: { _id: existing._id, property: existing.property, createdAt: existing.createdAt, ...publicStatus(existing) }, created: false }; }
+  if (!require("../properties/availability").acceptsViewings(property)) throw new AppError(409, "PROPERTY_UNAVAILABLE", "This property is no longer accepting viewing requests.");
   const duplicate = await Booking.findOne({ property: property.id, guestEmail: String(body.guestEmail || "").toLowerCase(), scheduledAt: { $gte: new Date(scheduledAt.getTime() - 10 * 60000), $lte: new Date(scheduledAt.getTime() + 10 * 60000) }, status: { $in: ["pending", "confirmed"] } });
   if (duplicate) throw new AppError(409, "DUPLICATE_BOOKING", "A similar viewing request already exists");
   const reference = `HOM-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;

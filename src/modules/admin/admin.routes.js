@@ -20,6 +20,7 @@ router.use(authenticateAdmin);
 function propertyInputForRole(body, role) {
   const input = { ...body };
   if (role === "editor") {
+    delete input.availabilityStatus;
     delete input.featured;
     delete input.verificationStatus;
     if (["published", "archived"].includes(input.status)) delete input.status;
@@ -100,6 +101,7 @@ router.patch(
       ],
       ["verificationStatus", "verification"],
       ["featured", "feature"],
+      ["availabilityStatus", "availability"],
     ])
       if (String(before[field]) !== String(item[field]))
         await audit.record(

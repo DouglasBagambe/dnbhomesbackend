@@ -506,3 +506,63 @@ test("editors cannot unpublish archived or published inventory, or access operat
   assert.equal(overview.body.data.pendingBookings, undefined);
   assert.equal(overview.body.data.newInquiries, undefined);
 });
+
+test("availability stays separate from publication, is validated, role protected and audited", async () => {
+  const created = await endpoint("admin", "post", "/properties", { ...make(), status: "published", availabilityStatus: "available" });
+  const id = created.body.data._id;
+  for (const value of [null, "", "unknown", ["sold"], { value: "sold" }]) {
+    assert.equal((await endpoint("admin", "patch", `/properties/${id}`, { availabilityStatus: value })).status, 400);
+  }
+  await endpoint("editor", "patch", `/properties/${id}`, { availabilityStatus: "sold" });
+  assert.equal((await Property.findById(id)).availabilityStatus, "available");
+  const response = await endpoint("admin", "patch", `/properties/${id}`, { availabilityStatus: "rented", availabilityVisibleUntil: "2099-01-01" });
+  assert.equal(response.status, 200);
+  assert.equal(response.body.data.status, "published");
+  assert.equal(+new Date(response.body.data.availabilityVisibleUntil) - +new Date(response.body.data.availabilityChangedAt), 14 * 86400000);
+  assert.equal(await Event.countDocuments({ entityId: id, action: "property.availability" }), 1);
+  const deadline = response.body.data.availabilityVisibleUntil;
+  const edited = await endpoint("admin", "patch", `/properties/${id}`, { title: "Edited without resetting expiry", availabilityStatus: "rented" });
+  assert.equal(edited.body.data.availabilityVisibleUntil, deadline);
+  const reopened = await endpoint("admin", "patch", `/properties/${id}`, { availabilityStatus: "available" });
+  assert.equal(reopened.body.data.availabilityVisibleUntil, undefined);
+});
+
+test("rented and sold listings are public during the 14-day window, then hidden in list/search/detail while retained in Admin", async () => {
+  for (const availabilityStatus of ["rented", "sold"]) {
+    const created = await endpoint("admin", "post", "/properties", { ...make(`Window ${availabilityStatus}`), status: "published", availabilityStatus });
+    const id = created.body.data._id;
+    assert.equal((await request(app).get(`/api/v1/properties/${id}`)).status, 200);
+    let list = await request(app).get("/api/v1/properties");
+    assert.ok(list.body.data.some((p) => p._id === id));
+    await Property.collection.updateOne({ _id: new (require("mongoose").Types.ObjectId)(id) }, { $set: { availabilityVisibleUntil: new Date(Date.now() - 1) } });
+    assert.equal((await request(app).get(`/api/v1/properties/${id}`)).status, 404);
+    assert.equal((await request(app).get(`/api/v1/properties/${created.body.data.slug}`)).status, 404);
+    list = await request(app).get("/api/v1/properties");
+    assert.ok(!list.body.data.some((p) => p._id === id));
+    const searched = await request(app).get("/api/v1/properties?q=Window");
+    assert.ok(!searched.body.data.some((p) => p._id === id));
+    const retained = await endpoint("admin", "get", `/properties/${id}`);
+    assert.equal(retained.status, 200);
+    assert.equal(retained.body.data.status, "published");
+    assert.equal(retained.body.data.availabilityStatus, availabilityStatus);
+    const filtered = await endpoint("admin", "get", `/properties?availabilityStatus=${availabilityStatus}`);
+    assert.ok(filtered.body.data.some((p) => p._id === id));
+  }
+});
+
+test("viewing requests reject nonavailable inventory; legacy listings and idempotent existing requests remain usable", async () => {
+  for (const availabilityStatus of [undefined, "available", "reserved", "rented", "sold", "unavailable"]) {
+    const created = await endpoint("admin", "post", "/properties", { ...make(`Viewing ${availabilityStatus}`), status: "published", ...(availabilityStatus ? { availabilityStatus } : {}) });
+    const id = created.body.data._id;
+    const body = { property: id, guestName: "Availability QA", guestEmail: "availability@example.test", guestPhone: "+256700000000", scheduledAt: new Date(Date.now() + 86400000).toISOString() };
+    const response = await request(app).post("/api/v1/bookings").set("Idempotency-Key", `availability-${id}`).send(body);
+    assert.equal(response.status, !availabilityStatus || availabilityStatus === "available" ? 201 : 409);
+    if (response.status === 201) {
+      await endpoint("admin", "patch", `/properties/${id}`, { availabilityStatus: "rented" });
+      const replay = await request(app).post("/api/v1/bookings").set("Idempotency-Key", `availability-${id}`).send(body);
+      assert.equal(replay.status, 200);
+      assert.equal(replay.body.data._id, response.body.data._id);
+    }
+  }
+  assert.equal(await Booking.countDocuments({ guestEmail: "availability@example.test" }), 2);
+});

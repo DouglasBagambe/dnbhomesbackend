@@ -32,6 +32,7 @@ const allowedFields = [
   "verificationStatus",
   "status",
   "legacyAgent",
+  "availabilityStatus",
 ];
 const pick = (body) =>
   Object.fromEntries(
@@ -113,7 +114,7 @@ async function uniqueSlug(title, ignoredId) {
 }
 
 function publicFilter(query) {
-  const filter = { status: "published" };
+  const filter = { status: "published", ...require("./availability").publicVisibility() };
   for (const field of ["purpose", "type", "featured"])
     if (query[field] !== undefined) filter[field] = query[field];
   for (const field of ["country", "region", "district", "area"])
@@ -307,7 +308,7 @@ async function getPublic(idOrSlug) {
   const selector = mongoose.isValidObjectId(idOrSlug)
     ? { _id: idOrSlug }
     : { slug: idOrSlug };
-  const item = await Property.findOne({ ...selector, status: "published" })
+  const item = await Property.findOne({ ...selector, status: "published", ...require("./availability").publicVisibility() })
     .populate("agent agency")
     .lean();
   if (!item) throw notFound("Property not found");
@@ -327,6 +328,7 @@ async function listAdmin(query) {
     "type",
     "featured",
     "verificationStatus",
+    "availabilityStatus",
     "agent",
     "agency",
   ])

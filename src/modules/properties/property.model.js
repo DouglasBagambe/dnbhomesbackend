@@ -118,6 +118,9 @@ const schema = new mongoose.Schema(
       default: "draft",
       index: true,
     },
+    availabilityStatus: { type: String, enum: require("./availability").values, index: true },
+    availabilityChangedAt: Date,
+    availabilityVisibleUntil: Date,
     deletionPending: { type: Boolean, default: false },
     publishedAt: Date,
     viewCount: { type: Number, default: 0, min: 0 },
@@ -126,6 +129,15 @@ const schema = new mongoose.Schema(
   { timestamps: true, optimisticConcurrency: true },
 );
 
+schema.pre("validate", function () {
+  if (!this.isModified("availabilityStatus")) return;
+  const { closed, visibleDays } = require("./availability");
+  this.availabilityChangedAt = new Date();
+  this.availabilityVisibleUntil = closed.includes(this.availabilityStatus)
+    ? new Date(this.availabilityChangedAt.getTime() + visibleDays * 86400000)
+    : undefined;
+});
+schema.index({ status: 1, availabilityStatus: 1, availabilityVisibleUntil: 1 });
 schema.index({ status: 1, publishedAt: -1 });
 schema.index({ status: 1, purpose: 1, type: 1, "price.amount": 1 });
 schema.index({ status: 1, featured: 1, publishedAt: -1 });
