@@ -7,6 +7,7 @@ const { identity, configured, providerStatus } = require('./auth');
 const State = require('./state.model');
 const Property = require('../properties/property.model');
 const Booking = require('../bookings/booking.model');
+const { mobileConfig } = require('./mobile-config');
 
 router.get('/capabilities', (req, res) => {
   const enabled = configured();
@@ -14,6 +15,7 @@ router.get('/capabilities', (req, res) => {
   res.json({
     data: {
       accounts: enabled,
+      mobile: mobileConfig(process.env, enabled ? providerStatus() : {}),
       providers: enabled ? providerStatus() : { google: false, apple: false },
       sync: enabled ? { saved: true, compare: true, recent: true, viewings: true, profile: true } : { saved: false, compare: false, recent: false, viewings: false, profile: false },
     },
